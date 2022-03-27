@@ -16,10 +16,13 @@ age_ranges = {
     6: '66-116',
 }
 
-model = load_model('final_cnn_model_checkpoint.h5')
+# model = load_model('final_cnn_model_checkpoint.h5')
+BASE_PATH = './api/machine_learning'
+
 class Face:
 
-    def __init__(self, img_path, detected_path='downloads', show_image=False, detect_eyes=False):
+    def __init__(self, filename, img_path, detected_path='detected_images', show_image=False, detect_eyes=False):
+        self.filename = filename
         self.img_path = img_path
         self.image = cv2.imread(img_path)
         self.frame = cv2.imread(img_path)
@@ -122,6 +125,6 @@ class Face:
 
 
     def save(self):
-        if not self.detected_path in os.listdir():
-            os.mkdir(self.detected_path)
-        cv2.imwrite(f'./{self.detected_path}/{self.img_path}', self.frame)
+        if not self.detected_path in os.listdir(f'{BASE_PATH}'):
+            os.mkdir(f'{BASE_PATH}/{self.detected_path}')
+        cv2.imwrite(f'{BASE_PATH}/{self.detected_path}/{self.filename}', self.frame)
