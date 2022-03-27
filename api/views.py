@@ -4,9 +4,15 @@ from rest_framework import status
 from .machine_learning.face_detection import Face
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
-import os
 import shutil
+from rest_framework.permissions import IsAuthenticated
+from .serializers import UserSerializerWithToken, MyTokenObtainPairSerializer
 import uuid
+from rest_framework_simplejwt.views import TokenObtainPairView
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 
 @api_view(['POST'])
 def faceDetection(request):
@@ -25,3 +31,28 @@ def faceDetection(request):
         shutil.rmtree(f'{BASE_PATH}/tmp/{UU_ID}')
 
     return Response("Image", status=status.HTTP_200_OK)
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
+
+@api_view(['POST'])
+def registerUser(request):
+    data = request.data
+    if User.objects.filter(email=data['email']):
+        return Response({'detail': 'User Already Exists with this Email'},
+                        status=status.HTTP_400_BAD_REQUEST)
+    user = User.objects.create(
+        firstname=data['firstname'],
+        email=data['email'],
+        password=make_password(data['password']),
+    )
+    serializer = UserSerializerWithToken(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def AuthRequest(request):
+
+    return Response('Authenticated', status=status.HTTP_200_OK)
