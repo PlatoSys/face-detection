@@ -19,9 +19,9 @@ age_ranges = {
 # model = load_model('final_cnn_model_checkpoint.h5')
 BASE_PATH = './api/machine_learning'
 
-class Face:
+class Detection:
 
-    def __init__(self, filename, img_path, detected_path='detected_images', show_image=False, detect_eyes=False):
+    def __init__(self, filename, img_path, save_path, detected_path='detected_images', show_image=False, detect_eyes=False):
         self.filename = filename
         self.img_path = img_path
         self.image = cv2.imread(img_path)
@@ -29,6 +29,7 @@ class Face:
         self.faces = detector.detect_faces(self.frame)
         self.detected_path = detected_path
         self.show_image = show_image
+        self.save_path = save_path
         self.detect_eyes = detect_eyes
         self.offset = 50
 
@@ -123,8 +124,8 @@ class Face:
             print(emotion_dict[maxindex])
         shutil.rmtree(files)
 
+    def get_processed_image(self):
+        return self.frame
 
     def save(self):
-        if not self.detected_path in os.listdir(f'{BASE_PATH}'):
-            os.mkdir(f'{BASE_PATH}/{self.detected_path}')
-        cv2.imwrite(f'{BASE_PATH}/{self.detected_path}/{self.filename}', self.frame)
+        cv2.imwrite(self.save_path, self.frame)

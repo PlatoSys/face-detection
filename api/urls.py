@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import AuthRequest, MyTokenObtainPairView, faceDetection, registerUser
+from .views import MyTokenObtainPairView, faceDetection, registerUser
 
 
 urlpatterns = [
@@ -8,5 +8,4 @@ urlpatterns = [
     path('register/', registerUser, name='user_register'),
     path('auth/',
         MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('check_auth/', AuthRequest)
     ]

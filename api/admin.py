@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User
+from .models import Face, User
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -7,3 +7,9 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ('email', 'firstname')
 
 admin.site.register(User, UserAdmin)
+
+class FaceAdmin(admin.ModelAdmin):
+    list_display = ('user', 'filename', 'image', 'processed_image')
+    search_fields = ('email', 'firstname')
+
+admin.site.register(Face, FaceAdmin)
