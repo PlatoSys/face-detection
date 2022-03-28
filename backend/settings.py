@@ -75,6 +75,13 @@ TEMPLATES = [
     },
 ]
 
+
+CURRENT_PATH = os.path.abspath(os.path.dirname(__file__))
+
+MEDIA_ROOT = os.path.join(CURRENT_PATH, 'media').replace('\\','/')
+
+MEDIA_URL = '/media/'
+
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 

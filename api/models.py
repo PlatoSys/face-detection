@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
+
 class UserManager(BaseUserManager):
 
     def create_user(self, email, firstname, password):
@@ -51,16 +52,19 @@ class User(AbstractBaseUser):
 
 
 def upload_to(instance, filename):
-    print(instance.user)
-    return f'./backend/media/images/{str(instance.user)}/{filename}'
+    return f'./images/{str(instance.user)}/{filename}'
+
+
+def upload_to_processed(instance, filename):
+    return f'./images/{str(instance.user)}/processed/processed_{filename}'
+
 
 class Face(models.Model):
     _id = models.AutoField(primary_key=True, editable=False)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     filename = models.CharField(max_length=200, null=True, blank=True)
     image = models.ImageField(null=True, blank=True, upload_to=upload_to)
-    processed_image = models.ImageField(null=True, blank=True, upload_to=upload_to)
+    processed_image = models.ImageField(null=True, blank=True)
 
     def __str__(self) -> str:
         return f'{self.filename}'
-
