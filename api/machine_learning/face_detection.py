@@ -1,11 +1,10 @@
 import os
 import shutil
-import cv2
+# import cv2
 from keras.models import load_model
 # from keras.models import model_from_json
 # from mtcnn.mtcnn import MTCNN
 # detector = MTCNN()
-detector = "CNN"
 
 age_ranges = {
     0: '1-2',
@@ -19,6 +18,7 @@ age_ranges = {
 
 model = load_model('./api/machine_learning/final_cnn_model_checkpoint.h5')
 cv2 = 'Test'
+detector = "CNN"
 
 
 class Detection:
