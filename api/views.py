@@ -8,7 +8,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import get_user_model
 from .models import Face
-from .machine_learning.face_detection import Detection
+from api.machine_learning.face_detection import Detection
 from .serializers import UserSerializerWithToken, MyTokenObtainPairSerializer
 
 User = get_user_model()
