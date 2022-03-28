@@ -1,6 +1,6 @@
 import os
 import shutil
-# import cv2
+import cv2
 from keras.models import load_model
 # from keras.models import model_from_json
 # from mtcnn.mtcnn import MTCNN
