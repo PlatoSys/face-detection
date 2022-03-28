@@ -54,8 +54,8 @@ function DetectScreen() {
   };
 
   const downloadAllProcessedImage = () => {
-    processedImages.forEach(element => {
-        downloadImage(element.name, element.processed)
+    processedImages.forEach((element) => {
+      downloadImage(element.name, element.processed);
     });
   };
 
@@ -119,23 +119,28 @@ function DetectScreen() {
         </div>
       ) : (
         <Form onSubmit={submitHandler}>
-          {[...Array(imagesCount).keys()].map((x) => (
-            <Form.Group key={x} controlId="image" className="my-2">
+          <Form.Group controlId="image" className="my-2">
+            <Form.Control
+              type="hidden"
+              placeholder="Enter Image"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+            ></Form.Control>
+            <Form.Group controlId="image" className="mb-3">
               <Form.Control
-                type="hidden"
+                type="file"
                 placeholder="Enter Image"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-              ></Form.Control>
-              <Form.Group controlId="image" className="mb-3">
-                <Form.Control
-                  type="file"
-                  placeholder="Enter Image"
-                  onChange={(e) => uploadFileHandler(e)}
-                />
-              </Form.Group>
+                onChange={(e) => uploadFileHandler(e)}
+              />
             </Form.Group>
-          ))}
+          </Form.Group>
+          <div>
+            {uploadImages.map((x) => (
+              <Row key={x.name}>
+                <p>{x.name}</p>
+              </Row>
+            ))}
+          </div>
 
           <Button type="submit" variant="primary" className="my-2">
             Upload
