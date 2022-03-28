@@ -27,13 +27,10 @@ function LoginScreen() {
   const submitHandler = (e) => {
     e.preventDefault();
     axios
-      .post(
-        "http://localhost:8000/api/auth/",
-        {
-          email,
-          password,
-        },
-      )
+      .post("http://localhost:8000/api/auth/", {
+        email,
+        password,
+      })
       .then((response) => {
         localStorage.setItem("token", `Bearer ${response.data.access}`);
         localStorage.setItem(

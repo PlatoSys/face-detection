@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function CollectionsScreen() {
-  return (
-    <div>CollectionsScreen</div>
-  )
+  return <div>CollectionsScreen</div>;
 }
 
-export default CollectionsScreen
+export default CollectionsScreen;

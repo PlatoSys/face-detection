@@ -1,10 +1,5 @@
 import React, { useContext } from "react";
-import {
-  Container,
-  Nav,
-  Navbar,
-  NavDropdown,
-} from "react-bootstrap";
+import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { UserDataContext, AuthTokenContext } from "../store";
 import { useNavigate } from "react-router-dom";
@@ -18,9 +13,9 @@ function Header() {
   const logoutHandler = () => {
     setAuthToken();
     setUserData();
-    localStorage.removeItem("userData")
+    localStorage.removeItem("userData");
     localStorage.removeItem("token");
-    navigate('/')
+    navigate("/");
   };
 
   return (
@@ -38,31 +33,21 @@ function Header() {
               navbarScroll
             >
               <LinkContainer to="/">
-                <Nav.Link>
-                  Home
-                </Nav.Link>
+                <Nav.Link>Home</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/detect">
-                <Nav.Link>
-                  Detect
-                </Nav.Link>
+                <Nav.Link>Detect</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/collections">
-                <Nav.Link>
-                  Collections
-                </Nav.Link>
+                <Nav.Link>Collections</Nav.Link>
               </LinkContainer>
 
               <LinkContainer to="/live">
-                <Nav.Link>
-                  Live
-                </Nav.Link>
+                <Nav.Link>Live</Nav.Link>
               </LinkContainer>
 
               <LinkContainer to="/about">
-                <Nav.Link>
-                  About
-                </Nav.Link>
+                <Nav.Link>About</Nav.Link>
               </LinkContainer>
             </Nav>
           </Navbar.Collapse>
@@ -73,7 +58,6 @@ function Header() {
           </LinkContainer> */}
           {userData ? (
             <NavDropdown title={userData.email} id="user">
-
               <LinkContainer to="/account">
                 <NavDropdown.Item>Account</NavDropdown.Item>
               </LinkContainer>

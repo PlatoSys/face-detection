@@ -9,13 +9,12 @@ import { useContext } from "react";
 import { AuthTokenContext, UserDataContext } from "../store";
 
 function RegisterScreen() {
-    
   const config = {
     headers: {
       "Content-type": "application/json",
     },
   };
-  
+
   const navigate = useNavigate();
   const [_, setAuthToken] = useContext(AuthTokenContext);
   const [userData, setUserData] = useContext(UserDataContext);

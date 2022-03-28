@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function LiveScreen() {
-  return (
-    <div>LiveScreen</div>
-  )
+  return <div>LiveScreen</div>;
 }
 
-export default LiveScreen
+export default LiveScreen;

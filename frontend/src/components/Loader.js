@@ -6,6 +6,7 @@ function Loader() {
     <Spinner
       animation="border"
       role="status"
+      variant="primary"
       style={{
         height: "100px",
         width: "100px",
@@ -13,7 +14,7 @@ function Loader() {
         display: "block",
       }}
     >
-      <span className="sr-only">Loading...</span>
+      <span className="sr-only"></span>
     </Spinner>
   );
 }

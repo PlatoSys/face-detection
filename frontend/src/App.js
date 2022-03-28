@@ -11,11 +11,11 @@ import "./App.css";
 import Loader from "./components/Loader";
 import LoginScreen from "./screens/LoginScreen";
 import { AuthTokenContext, UserDataContext } from "./store";
-import axios from 'axios';
+import axios from "axios";
 import CollectionsScreen from "./screens/CollectionsScreen";
 import DetectScreen from "./screens/DetectScreen";
 
-axios.defaults.headers.post['Content-Type'] = 'application/json';
+axios.defaults.headers.post["Content-Type"] = "application/json";
 
 function App() {
   const [authToken, setAuthToken] = useState(localStorage.getItem("token"));
@@ -42,7 +42,7 @@ function App() {
                 </Routes>
               </Container>
             </main>
-            <Footer />
+            {/* <Footer /> */}
           </Router>
         </UserDataContext.Provider>
       </AuthTokenContext.Provider>

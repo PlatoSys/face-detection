@@ -73,7 +73,7 @@ function HomeScreen() {
               </p>
             </Row>
             <Row>
-            <LinkContainer to="/collections">
+              <LinkContainer to="/collections">
                 <Nav.Link>
                   <Button class="btn btn-outline-primary" variant="primary">
                     Check out collections
@@ -103,7 +103,7 @@ function HomeScreen() {
               </p>
             </Row>
             <Row>
-            <LinkContainer to="/live">
+              <LinkContainer to="/live">
                 <Nav.Link>
                   <Button class="btn btn-outline-primary" variant="primary">
                     Start Live
