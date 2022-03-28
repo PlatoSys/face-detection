@@ -62,59 +62,72 @@ function CollectionsScreen() {
 
   return (
     <div>
-      {loader && <Loader />}
-      <div>
-        <Button
-          style={{ marginBottom: "15px" }}
-          onClick={downloadAllProcessedImage}
-        >
-          Download Processed Images
-        </Button>
-        <Button
-          style={{ marginBottom: "15px", marginLeft: "10px" }}
-          onClick={deleteAllImages}
-        >
-          Delete Images
-        </Button>
-      </div>
-      {console.log(collection)}
-      {collection.map((x) => (
-        <Row key={x.filename} style={{ marginBottom: "15px" }}>
-          <Card style={{ width: "50%" }}>
-            <Card.Img variant="top" src={`${x.image}`} />
-            <Card.Body
-              className="d-flex justify-content-between"
-              style={{ alignItems: "center" }}
+      {loader ? (
+        <Loader />
+      ) : (
+        <div>
+          <div>
+            <Button
+              type="button"
+              variant="light"
+              style={{ marginBottom: "15px" }}
+              className="btn btn-outline-success"
+              onClick={downloadAllProcessedImage}
             >
-              <Card.Title>Original Image</Card.Title>
-              {/* <Button onClick={() => downloadImage(x.filename, x.image)}>
+              Download Processed Images
+            </Button>
+            <Button
+              type="button"
+              variant="light"
+              className="btn btn-outline-danger"
+              style={{ marginBottom: "15px", marginLeft: "10px" }}
+              onClick={deleteAllImages}
+            >
+              Delete Images
+            </Button>
+          </div>
+          {console.log(collection)}
+          {collection.map((x) => (
+            <Row key={x.filename} style={{ marginBottom: "15px" }}>
+              <Card style={{ width: "50%" }}>
+                <Card.Img variant="top" src={`${x.image}`} />
+                <Card.Body
+                  className="d-flex justify-content-between"
+                  style={{ alignItems: "center" }}
+                >
+                  <Card.Title>Original Image</Card.Title>
+                  {/* <Button onClick={() => downloadImage(x.filename, x.image)}>
                 Download
               </Button> */}
-            </Card.Body>
-          </Card>
-          <Card style={{ width: "50%" }}>
-            <Card.Img variant="top" src={`${x.processed_image}`} />
-            <Card.Body
-              className="d-flex justify-content-between"
-              style={{ alignItems: "center" }}
-            >
-              <Card.Title>Processed Image</Card.Title>
-              <Button
-                onClick={() => deleteImage(x.id, x.filename)}
-                variant="danger"
-              >
-                Delete
-              </Button>
-              <Button
-                variant="success"
-                onClick={() => downloadImage(x.filename, x.processed_image)}
-              >
-                Download
-              </Button>
-            </Card.Body>
-          </Card>
-        </Row>
-      ))}
+                </Card.Body>
+              </Card>
+              <Card style={{ width: "50%" }}>
+                <Card.Img variant="top" src={`${x.processed_image}`} />
+                <Card.Body
+                  className="d-flex justify-content-between"
+                  style={{ alignItems: "center" }}
+                >
+                  <Card.Title>Processed Image</Card.Title>
+                  <Button
+                    onClick={() => deleteImage(x.id, x.filename)}
+                    variant="light"
+                    className="btn btn-outline-danger"
+                  >
+                    Delete
+                  </Button>
+                  <Button
+                    variant="light"
+                    className="btn btn-outline-success"
+                    onClick={() => downloadImage(x.filename, x.processed_image)}
+                  >
+                    Download
+                  </Button>
+                </Card.Body>
+              </Card>
+            </Row>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

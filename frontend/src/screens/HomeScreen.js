@@ -29,7 +29,7 @@ function HomeScreen() {
             <Row>
               <LinkContainer to="/detect">
                 <Nav.Link>
-                  <Button className="btn btn-outline-primary" variant="primary">
+                  <Button className="btn" variant="primary">
                     Start Detecting
                   </Button>
                 </Nav.Link>
@@ -39,7 +39,7 @@ function HomeScreen() {
           <Col>
             <Image
               loading="lazy"
-              src={"./images/landing_page_image.png"}
+              src={"./images/detection_boy.jpg"}
               alt="face detection"
               fluid
             />
@@ -51,7 +51,7 @@ function HomeScreen() {
           <Col>
             <Image
               loading="lazy"
-              src={"./images/database.png"}
+              src={"./images/team.jpg"}
               alt="face detection"
               fluid
             />
@@ -75,7 +75,7 @@ function HomeScreen() {
             <Row>
               <LinkContainer to="/collections">
                 <Nav.Link>
-                  <Button className="btn btn-outline-primary" variant="primary">
+                  <Button className="btn" variant="primary">
                     Check out collections
                   </Button>
                 </Nav.Link>
@@ -105,7 +105,7 @@ function HomeScreen() {
             <Row>
               <LinkContainer to="/live">
                 <Nav.Link>
-                  <Button className="btn btn-outline-primary" variant="primary">
+                  <Button className="btn" variant="primary">
                     Start Live
                   </Button>
                 </Nav.Link>
@@ -115,7 +115,7 @@ function HomeScreen() {
           <Col>
             <Image
               loading="lazy"
-              src={"./images/landing_page_image.png"}
+              src={"./images/draw.jpg"}
               alt="face detection"
               fluid
             />
