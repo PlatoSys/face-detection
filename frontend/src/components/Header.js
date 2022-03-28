@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { UserDataContext, AuthTokenContext } from "../store";
 import { useNavigate } from "react-router-dom";
+import { UserDataContext, AuthTokenContext } from "../store";
 
 function Header() {
   const navigate = useNavigate();

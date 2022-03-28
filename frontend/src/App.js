@@ -1,20 +1,20 @@
 import { Suspense, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Container } from "react-bootstrap";
+import axios from "axios";
 import HomeScreen from "./screens/HomeScreen";
 import AboutScreen from "./screens/AboutScreen";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import LiveScreen from "./screens/LiveScreen";
-import RegisterScreen from "./screens/RegisterScreen";
-import "./App.css";
-import Loader from "./components/Loader";
+import DocumentationScreen from "./screens/DocumentationScreen";
 import LoginScreen from "./screens/LoginScreen";
-import { AuthTokenContext, UserDataContext } from "./store";
-import axios from "axios";
 import CollectionsScreen from "./screens/CollectionsScreen";
 import DetectScreen from "./screens/DetectScreen";
-import DocumentationScreen from "./screens/DocumentationScreen";
+import LiveScreen from "./screens/LiveScreen";
+import RegisterScreen from "./screens/RegisterScreen";
+import Loader from "./components/Loader";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import { AuthTokenContext, UserDataContext } from "./store";
+import "./App.css";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -47,7 +47,7 @@ function App() {
                 </Routes>
               </Container>
             </main>
-            {/* <Footer /> */}
+            <Footer />
           </Router>
         </UserDataContext.Provider>
       </AuthTokenContext.Provider>

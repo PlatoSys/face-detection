@@ -1,9 +1,20 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import { Container, Row, Col } from "react-bootstrap";
 
 function Footer() {
+  const footer = useRef();
+
+  useEffect(() => {
+    let rect = footer.current.getBoundingClientRect()
+    console.log(window.innerHeight,  rect.y)
+    if (rect.y < 600){
+      footer.current.style.marginTop = `${window.innerHeight - rect.y}px`
+    }
+  }, [])
+  
   return (
-    <footer>
+
+    <footer ref={footer}>
       <Container>
         <Row>
           <Col

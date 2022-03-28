@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Form, Button, Row, Card } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { saveAs } from "file-saver";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
-import axios from "axios";
 import { AuthTokenContext, UserDataContext } from "../store";
-import { useContext } from "react";
-import { saveAs } from "file-saver";
-import { useNavigate } from "react-router-dom";
 
 function DetectScreen() {
   const navigate = useNavigate();

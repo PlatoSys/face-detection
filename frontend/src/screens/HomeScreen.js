@@ -1,7 +1,7 @@
 import React from "react";
-import Loader from "../components/Loader";
 import { Row, Col, Image, Nav, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import Loader from "../components/Loader";
 
 function HomeScreen() {
   return (
