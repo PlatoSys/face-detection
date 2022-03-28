@@ -42,7 +42,11 @@ function Header() {
                   Home
                 </Nav.Link>
               </LinkContainer>
-
+              <LinkContainer to="/detect">
+                <Nav.Link>
+                  Detect
+                </Nav.Link>
+              </LinkContainer>
               <LinkContainer to="/collections">
                 <Nav.Link>
                   Collections
