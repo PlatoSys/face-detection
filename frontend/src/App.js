@@ -1,24 +1,33 @@
-import logo from './logo.svg';
+import { lazy, Suspense } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Container } from "react-bootstrap";
+import HomeScreen from "./screens/HomeScreen";
+import AboutScreen from "./screens/AboutScreen";
+import Header from "./components/Header";
+import LiveScreen from "./screens/LiveScreen";
+import RegisterScreen from "./screens/RegisterScreen";
 import './App.css';
+import Loader from "./components/Loader";
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Suspense fallback={<Loader />}>
+      <Router>
+        <Header />
+        <main className="py-3">
+          <Container>
+            <Routes>
+              <Route path="/" element={<HomeScreen />} />
+              <Route path="/about" element={<AboutScreen />} />
+              <Route path="/live" element={<LiveScreen />} />
+              <Route path="/register" element={<RegisterScreen />} />
+            </Routes>
+          </Container>
+        </main>
+        {/* <Footer /> */}
+      </Router>
+    </Suspense>
   );
 }
 
