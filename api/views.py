@@ -1,5 +1,6 @@
 import os
 import uuid
+from django.http import Http404
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,7 +10,8 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth import get_user_model
 from .models import Face
 from .machine_learning.face_detection import Detection
-from .serializers import UserSerializerWithToken, MyTokenObtainPairSerializer
+from .serializers import UserSerializerWithToken, MyTokenObtainPairSerializer, CollectionSerializer
+from rest_framework.views import APIView
 
 User = get_user_model()
 
@@ -70,3 +72,41 @@ def registerUser(request):
     )
     serializer = UserSerializerWithToken(user)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def getCollections(request):
+    collections = Face.objects.filter(user=request.user)
+
+    serializer = CollectionSerializer(collections, many=True)
+
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@permission_classes([IsAuthenticated])
+class CollectionsListView(APIView):
+
+    def get(self, request, format=None):
+        collections = Face.objects.filter(user=request.user)
+
+        serializer = CollectionSerializer(collections, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def delete(self, request, format=None):
+        Face.objects.filter(user=request.user).delete()
+        
+        return Response(True, status=status.HTTP_200_OK)
+
+@permission_classes([IsAuthenticated])
+class CollectionsDetailView(APIView):
+
+    def get_object(self, pk):
+        try:
+            return Face.objects.get(pk=pk)
+        except Face.DoesNotExist:
+            raise Http404
+
+    def delete(self, request, pk, format=None):
+
+        Face.objects.filter(id=pk).delete()
+
+        return Response(True, status=status.HTTP_200_OK)

@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import get_user_model
+from api.models import Face
 User = get_user_model()
 
 
@@ -48,3 +49,9 @@ class UserSerializerWithToken(UserSerializer):
     def get_token(self, obj):
         token = RefreshToken.for_user(obj)
         return str(token.access_token)
+
+class CollectionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Face
+        fields = ['id', 'user', 'filename', 'image', 'processed_image']

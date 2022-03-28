@@ -29,7 +29,7 @@ function HomeScreen() {
             <Row>
               <LinkContainer to="/detect">
                 <Nav.Link>
-                  <Button class="btn btn-outline-primary" variant="primary">
+                  <Button className="btn btn-outline-primary" variant="primary">
                     Start Detecting
                   </Button>
                 </Nav.Link>
@@ -75,7 +75,7 @@ function HomeScreen() {
             <Row>
               <LinkContainer to="/collections">
                 <Nav.Link>
-                  <Button class="btn btn-outline-primary" variant="primary">
+                  <Button className="btn btn-outline-primary" variant="primary">
                     Check out collections
                   </Button>
                 </Nav.Link>
@@ -105,7 +105,7 @@ function HomeScreen() {
             <Row>
               <LinkContainer to="/live">
                 <Nav.Link>
-                  <Button class="btn btn-outline-primary" variant="primary">
+                  <Button className="btn btn-outline-primary" variant="primary">
                     Start Live
                   </Button>
                 </Nav.Link>
