@@ -24,6 +24,8 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
+      - name: Setup OpenCV
+        uses: Dovyski/setup-opencv-action@v1
       - name: Run Tests
         run: |
           python3 manage.py test && flake8
