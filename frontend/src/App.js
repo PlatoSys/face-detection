@@ -14,6 +14,7 @@ import { AuthTokenContext, UserDataContext } from "./store";
 import axios from "axios";
 import CollectionsScreen from "./screens/CollectionsScreen";
 import DetectScreen from "./screens/DetectScreen";
+import DocumentationScreen from "./screens/DocumentationScreen";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -37,6 +38,10 @@ function App() {
                   <Route path="/collections" element={<CollectionsScreen />} />
                   <Route path="/about" element={<AboutScreen />} />
                   <Route path="/live" element={<LiveScreen />} />
+                  <Route
+                    path="/documentation"
+                    element={<DocumentationScreen />}
+                  />
                   <Route path="/register" element={<RegisterScreen />} />
                   <Route path="/login" element={<LoginScreen />} />
                 </Routes>

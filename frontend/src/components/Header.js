@@ -46,6 +46,9 @@ function Header() {
                 <Nav.Link>Live</Nav.Link>
               </LinkContainer>
 
+              <LinkContainer to="/documentation">
+                <Nav.Link>Documentation</Nav.Link>
+              </LinkContainer>
               <LinkContainer to="/about">
                 <Nav.Link>About</Nav.Link>
               </LinkContainer>
