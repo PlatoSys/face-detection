@@ -5,15 +5,21 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import FormContainer from "../components/FormContainer";
 import axios from "axios";
+import { useContext } from "react";
+import { AuthTokenContext, UserDataContext } from "../store";
 
 function RegisterScreen() {
-    const navigate = useNavigate();
-
+    
   const config = {
     headers: {
       "Content-type": "application/json",
     },
   };
+  
+  const navigate = useNavigate();
+  const [_, setAuthToken] = useContext(AuthTokenContext);
+  const [userData, setUserData] = useContext(UserDataContext);
+
   const [firstname, setFirstname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,21 +33,38 @@ function RegisterScreen() {
     if (password !== confirmPassword) {
       setMessage("Passwords do not match");
     } else {
-        setLoading(true)
-      axios.post(
-        "http://localhost:8000/api/register/",
-        {
-          firstname,
-          email,
-          password,
-        },
-        config
-      ).then(response => {
-          setMessage(`${response.data.firstname} has been Registered Successfully`)
-            navigate('/')
+      setLoading(true);
+      axios
+        .post(
+          "http://localhost:8000/api/register/",
+          {
+            firstname,
+            email,
+            password,
+          },
+          config
+        )
+        .then((response) => {
+          setMessage(
+            `${response.data.firstname} has been Registered Successfully`
+          );
+          localStorage.setItem("token", `Bearer ${response.data.access}`);
+          localStorage.setItem(
+            "userData",
+            JSON.stringify({
+              email: response.data.email,
+              firstname: response.data.firstname,
+            })
+          );
+          setAuthToken(`Bearer ${response.data.access}`);
+          setUserData({
+            email: response.data.email,
+            firstname: response.data.firstname,
+          });
+          navigate("/");
         })
-      .catch(err => setError(err.response.data.detail));
-      setLoading(false)
+        .catch((err) => setError(err.response.data.detail));
+      setLoading(false);
     }
   };
 
@@ -106,10 +129,7 @@ function RegisterScreen() {
 
         <Row className="py-3">
           <Col>
-            Have an Account?{" "}
-            <Link to="/login">
-              Sign In here
-            </Link>
+            Have an Account? <Link to="/login">Sign In here</Link>
           </Col>
         </Row>
       </FormContainer>

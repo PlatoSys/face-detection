@@ -1,8 +1,27 @@
-import React from "react";
-import { Container, Nav, Navbar } from "react-bootstrap";
+import React, { useContext } from "react";
+import {
+  Container,
+  Nav,
+  Navbar,
+  NavDropdown,
+} from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import { UserDataContext, AuthTokenContext } from "../store";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
+  const navigate = useNavigate();
+
+  const [userData, setUserData] = useContext(UserDataContext);
+  const [_, setAuthToken] = useContext(AuthTokenContext);
+
+  const logoutHandler = () => {
+    setAuthToken();
+    setUserData();
+    localStorage.removeItem("userData")
+    localStorage.removeItem("token");
+    navigate('/')
+  };
 
   return (
     <header>
@@ -20,29 +39,49 @@ function Header() {
             >
               <LinkContainer to="/">
                 <Nav.Link>
-                  <i className="fas fa-shopping-cart"></i> Home
+                  Home
+                </Nav.Link>
+              </LinkContainer>
+
+              <LinkContainer to="/collections">
+                <Nav.Link>
+                  Collections
                 </Nav.Link>
               </LinkContainer>
 
               <LinkContainer to="/live">
                 <Nav.Link>
-                  <i className="fas fa-shopping-cart"></i> Live
+                  Live
                 </Nav.Link>
               </LinkContainer>
 
               <LinkContainer to="/about">
                 <Nav.Link>
-                  <i className="fas fa-shopping-cart"></i> About
+                  About
                 </Nav.Link>
               </LinkContainer>
-
             </Nav>
           </Navbar.Collapse>
-          <LinkContainer to="/register" style={{marginRight: "20px"}}>
+          {/* <LinkContainer to="/login" style={{marginRight: "20px"}}>
                 <Nav.Link>
-                  <i className="fas fa-shopping-cart"></i> Register
+                 {userData ? (userData.email) : "Login"}
                 </Nav.Link>
-          </LinkContainer>
+          </LinkContainer> */}
+          {userData ? (
+            <NavDropdown title={userData.email} id="user">
+
+              <LinkContainer to="/account">
+                <NavDropdown.Item>Account</NavDropdown.Item>
+              </LinkContainer>
+              <NavDropdown.Item onClick={logoutHandler}>
+                Logout
+              </NavDropdown.Item>
+            </NavDropdown>
+          ) : (
+            <LinkContainer to="/login">
+              <Nav.Link>Login</Nav.Link>
+            </LinkContainer>
+          )}
         </Container>
       </Navbar>
     </header>
