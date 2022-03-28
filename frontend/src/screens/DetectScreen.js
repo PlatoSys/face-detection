@@ -5,6 +5,7 @@ import Message from "../components/Message";
 import axios from "axios";
 import { AuthTokenContext } from "../store";
 import { useContext } from "react";
+import { saveAs } from "file-saver";
 
 function DetectScreen() {
   const [image, setImage] = useState("");
@@ -47,15 +48,38 @@ function DetectScreen() {
     setUploadImages([]);
   };
 
+  const downloadImage = (name, url) => {
+    url = `http://localhost:8000/media/${url}`;
+    saveAs(url, name);
+  };
+
+  const downloadAllProcessedImage = () => {
+    processedImages.forEach(element => {
+        downloadImage(element.name, element.processed)
+    });
+  };
+
   return (
     <div>
       {processedImages.length === 0 ? (
         <h1>Upload Images</h1>
       ) : (
         <div>
-          <Button style={{ marginBottom: "15px" }} onClick={resetHandler}>
-            Reset
-          </Button>
+          <div className="d-flex">
+            <Button
+              style={{ marginBottom: "15px" }}
+              onClick={downloadAllProcessedImage}
+            >
+              Download Processed Images
+            </Button>
+            <Button
+              style={{ marginBottom: "15px", marginLeft: "15px" }}
+              onClick={resetHandler}
+            >
+              Reset
+            </Button>
+          </div>
+
           <Message variant="success">Images has Been Processed</Message>
         </div>
       )}
@@ -67,23 +91,27 @@ function DetectScreen() {
           {processedImages.map((x) => (
             <Row key={x.original} style={{ marginBottom: "15px" }}>
               <Card style={{ width: "50%" }}>
-                <Card.Img variant="top" src={`media/${x.original}`} fluid />
+                <Card.Img variant="top" src={`media/${x.original}`} />
                 <Card.Body
                   className="d-flex justify-content-between"
                   style={{ alignItems: "center" }}
                 >
-                  <Card.Title>Processed Image</Card.Title>
-                  <Button>Download</Button>
+                  <Card.Title>Original Image</Card.Title>
+                  <Button onClick={() => downloadImage(x.name, x.original)}>
+                    Download
+                  </Button>
                 </Card.Body>
               </Card>
               <Card style={{ width: "50%" }}>
-                <Card.Img variant="top" src={`media/${x.processed}`} fluid />
+                <Card.Img variant="top" src={`media/${x.processed}`} />
                 <Card.Body
                   className="d-flex justify-content-between"
                   style={{ alignItems: "center" }}
                 >
                   <Card.Title>Processed Image</Card.Title>
-                  <Button>Download</Button>
+                  <Button onClick={() => downloadImage(x.name, x.processed)}>
+                    Download
+                  </Button>
                 </Card.Body>
               </Card>
             </Row>

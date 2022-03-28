@@ -22,6 +22,7 @@ def faceDetection(request):
 
     UU_ID = str(uuid.uuid4())
     BASE_PATH = f'./backend/media/images/{username}'
+    data = []
 
     for file in request.FILES.values():
 
@@ -36,16 +37,20 @@ def faceDetection(request):
         if 'processed' not in os.listdir(BASE_PATH):
             os.mkdir(f'{BASE_PATH}/processed')
 
-        print(f'{BASE_PATH}/{file}')
         face = Detection(file, f'{BASE_PATH}/{file}', detect_eyes=True,
                          save_path=f'{BASE_PATH}/processed/processed_{file}')
         face.detect_faces()
         face.save()
 
+        data.append({
+            'name': f'{file}',
+            'original': f'images/{username}/{file}',
+            'processed': f'images/{username}/processed/processed_{file}',
+            })
         model.processed_image = f'images/{username}/processed/processed_{file}'
         model.save()
 
-    return Response("Image", status=status.HTTP_200_OK)
+    return Response(data, status=status.HTTP_200_OK)
 
 
 class MyTokenObtainPairView(TokenObtainPairView):

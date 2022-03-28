@@ -1,10 +1,10 @@
 import os
 import shutil
-# import cv2
+import cv2
 from keras.models import load_model
 # from keras.models import model_from_json
-# from mtcnn.mtcnn import MTCNN
-# detector = MTCNN()
+from mtcnn.mtcnn import MTCNN
+detector = MTCNN()
 
 age_ranges = {
     0: '1-2',
@@ -17,8 +17,8 @@ age_ranges = {
 }
 
 model = load_model('./api/machine_learning/final_cnn_model_checkpoint.h5')
-cv2 = 'Test'
-detector = "CNN"
+# cv2 = 'Test'
+# detector = "CNN"
 
 
 class Detection:
@@ -34,17 +34,7 @@ class Detection:
         self.offset = 50
 
     def detect_faces(self):
-
         self._add_bounding_boxes()
-
-        if self.show_image:
-            self._display()
-
-    def _display(self):
-        pass
-        # cv2.imshow("Face Detection - to quit press ESC", self.frame)
-        # key = cv2.waitKey(0)
-        # cv2.destroyAllWindows()
 
     def _add_bounding_boxes(self):
         for result in self.faces:

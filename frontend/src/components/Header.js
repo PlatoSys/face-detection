@@ -51,11 +51,6 @@ function Header() {
               </LinkContainer>
             </Nav>
           </Navbar.Collapse>
-          {/* <LinkContainer to="/login" style={{marginRight: "20px"}}>
-                <Nav.Link>
-                 {userData ? (userData.email) : "Login"}
-                </Nav.Link>
-          </LinkContainer> */}
           {userData ? (
             <NavDropdown title={userData.email} id="user">
               <LinkContainer to="/account">
