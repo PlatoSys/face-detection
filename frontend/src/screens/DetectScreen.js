@@ -1,19 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button, Row, Card } from "react-bootstrap";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import axios from "axios";
-import { AuthTokenContext } from "../store";
+import { AuthTokenContext, UserDataContext } from "../store";
 import { useContext } from "react";
 import { saveAs } from "file-saver";
+import { useNavigate } from "react-router-dom";
 
 function DetectScreen() {
+  const navigate = useNavigate();
   const [image, setImage] = useState("");
   const [imagesCount, setImagesCount] = useState(1);
   const [uploadImages, setUploadImages] = useState([]);
   const [authToken] = useContext(AuthTokenContext);
   const [processedImages, setProcessedImages] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [userData] = useContext(UserDataContext);
+
+  useEffect(() => {
+    if (!userData) {
+      navigate(`/login`);
+    }
+  }, [navigate]);
 
   const submitHandler = (e) => {
     e.preventDefault();

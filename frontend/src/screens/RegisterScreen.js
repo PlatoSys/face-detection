@@ -47,7 +47,7 @@ function RegisterScreen() {
           setMessage(
             `${response.data.firstname} has been Registered Successfully`
           );
-          localStorage.setItem("token", `Bearer ${response.data.access}`);
+          localStorage.setItem("token", `Bearer ${response.data.token}`);
           localStorage.setItem(
             "userData",
             JSON.stringify({

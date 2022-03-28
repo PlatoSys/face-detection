@@ -22,7 +22,7 @@ function CollectionsScreen() {
 
   useEffect(() => {
     if (!userData) {
-      navigate(`/`);
+      navigate(`/login`);
     } else {
       setLoader(true);
       axios.get("/api/collections/", config).then((response) => {
