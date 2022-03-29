@@ -33,7 +33,7 @@ function CollectionsScreen() {
   }, [navigate]);
 
   const downloadImage = (name, url) => {
-    url = `http://localhost:8000${url}`;
+    url = `http://192.168.16.103:8000${url}`;
     saveAs(url, name);
   };
 

@@ -57,7 +57,7 @@ function DetectScreen() {
   };
 
   const downloadImage = (name, url) => {
-    url = `http://localhost:8000/media/${url}`;
+    url = `http://192.168.16.103:8000/media/${url}`;
     saveAs(url, name);
   };
 

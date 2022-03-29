@@ -34,7 +34,7 @@ function LiveScreen() {
         },
       };
       axios.post("/api/detect/", formData, config).then((response) => {
-        setProcessedImage(`http://localhost:8000/media/${response.data.processed}`);
+        setProcessedImage(`http://192.168.16.103:8000/media/${response.data.processed}`);
         setLoader(false);
       });
 
