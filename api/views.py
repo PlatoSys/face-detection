@@ -10,7 +10,8 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth import get_user_model
 from .models import Face
 from .machine_learning.face_detection import Detection
-from .serializers import UserSerializerWithToken, MyTokenObtainPairSerializer, CollectionSerializer
+from .serializers import (UserSerializerWithToken, MyTokenObtainPairSerializer,
+                          CollectionSerializer)
 from rest_framework.views import APIView
 import cloudinary
 import cloudinary.uploader
@@ -18,8 +19,8 @@ import cloudinary.api
 import urllib.request
 
 
-
 User = get_user_model()
+
 
 def create_directory_structure(username):
     BASE_PATH = './backend/media/images'
@@ -32,6 +33,7 @@ def create_directory_structure(username):
         if 'live' not in os.listdir(BASE_PATH):
             os.mkdir(f'{BASE_PATH}/live')
 
+
 def process_image(file, img_path, save_path, user, live=False):
     username = f'{user}'
     processed_path = f'images/{username}/processed/processed_{file}'
@@ -43,7 +45,7 @@ def process_image(file, img_path, save_path, user, live=False):
     )
 
     face = Detection(file, img_path=img_path, detect_eyes=True,
-                        save_path=save_path)
+                     save_path=save_path)
     face.detect_faces()
     face.save()
 
@@ -52,9 +54,11 @@ def process_image(file, img_path, save_path, user, live=False):
 
     return {
         'name': f'{file}',
-        'original': f'images/{username}/{file}' if not live else f'images/{username}/live/{file}',
+        'original': (f'images/{username}/{file}'
+                     if not live else f'images/{username}/live/{file}'),
         'processed': processed_path,
     }
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -77,7 +81,7 @@ def faceDetection(request):
         urllib.request.urlretrieve(cld_response['url'], live_path)
 
         data = process_image(file, img_path=img_path, save_path=save_path,
-                                        user=request.user, live=True)
+                             user=request.user, live=True)
     else:
         data = []
         for file in request.FILES.values():
@@ -85,8 +89,8 @@ def faceDetection(request):
             save_path = f'{BASE_PATH}/processed/processed_{file}'
             img_path = f'{BASE_PATH}/{file}'
 
-            processed_image = process_image(file, img_path=img_path,
-                                            save_path=save_path, user=request.user)
+            processed_image = process_image(file, img_path, save_path,
+                                            user=request.user)
             data.append(processed_image)
 
     return Response(data, status=status.HTTP_200_OK)
@@ -110,13 +114,6 @@ def registerUser(request):
     serializer = UserSerializerWithToken(user)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view(['GET'])
-def getCollections(request):
-    collections = Face.objects.filter(user=request.user)
-
-    serializer = CollectionSerializer(collections, many=True)
-
-    return Response(serializer.data, status=status.HTTP_200_OK)
 
 @permission_classes([IsAuthenticated])
 class CollectionsListView(APIView):
@@ -127,11 +124,12 @@ class CollectionsListView(APIView):
         serializer = CollectionSerializer(collections, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def delete(self, request, format=None):
         Face.objects.filter(user=request.user).delete()
-        
+
         return Response(True, status=status.HTTP_200_OK)
+
 
 @permission_classes([IsAuthenticated])
 class CollectionsDetailView(APIView):

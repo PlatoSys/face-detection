@@ -50,6 +50,7 @@ class UserSerializerWithToken(UserSerializer):
         token = RefreshToken.for_user(obj)
         return str(token.access_token)
 
+
 class CollectionSerializer(serializers.ModelSerializer):
 
     class Meta:
