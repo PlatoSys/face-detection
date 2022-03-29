@@ -21,7 +21,7 @@ import urllib.request
 
 User = get_user_model()
 
-def directory_structure(username):
+def create_directory_structure(username):
     BASE_PATH = './backend/media/images'
     if username not in os.listdir(BASE_PATH):
         os.mkdir(f'{BASE_PATH}/{username}')
@@ -32,6 +32,30 @@ def directory_structure(username):
         if 'live' not in os.listdir(BASE_PATH):
             os.mkdir(f'{BASE_PATH}/live')
 
+def process_image(file, img_path, save_path, user, live=False):
+    username = f'{user}'
+    processed_path = f'images/{username}/processed/processed_{file}'
+
+    model = Face.objects.create(
+        user=user,
+        filename=f'{file}',
+        image=file if not live else f'images/{username}/live/{file}',
+    )
+
+    face = Detection(file, img_path=img_path, detect_eyes=True,
+                        save_path=save_path)
+    face.detect_faces()
+    face.save()
+
+    model.processed_image = processed_path
+    model.save()
+
+    return {
+        'name': f'{file}',
+        'original': f'images/{username}/{file}' if not live else f'images/{username}/live/{file}',
+        'processed': processed_path,
+    }
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def faceDetection(request):
@@ -39,65 +63,31 @@ def faceDetection(request):
     UU_ID = str(uuid.uuid4())
     BASE_PATH = f'./backend/media/images/{username}'
 
-    directory_structure(username)
+    create_directory_structure(username)
 
     live_image = request.data.get('live_image')
     if live_image:
         data = {}
-        filename = request.data.get('filename')
-        filename = f'{UU_ID}_{filename}'
-        live_path = f'./backend/media/images/{username}/live/{filename}'
-        image_path = f'images/{username}/live/{filename}'
+        file = f'{UU_ID}_{request.data.get("filename")}'
+        live_path = f'./backend/media/images/{username}/live/{file}'
+        img_path = f'{BASE_PATH}/live/{file}'
+        save_path = f'{BASE_PATH}/processed/processed_{file}'
 
         cld_response = cloudinary.uploader.upload(live_image)
         urllib.request.urlretrieve(cld_response['url'], live_path)
 
-        face = Detection(image_path, f'{BASE_PATH}/live/{filename}', detect_eyes=True,
-                    save_path=f'{BASE_PATH}/processed/processed_{filename}')
-        face.detect_faces()
-        face.save()
+        data = process_image(file, img_path=img_path, save_path=save_path,
+                                        user=request.user, live=True)
+    else:
+        data = []
+        for file in request.FILES.values():
+            file.name = f'{UU_ID}_{file}'
+            save_path = f'{BASE_PATH}/processed/processed_{file}'
+            img_path = f'{BASE_PATH}/{file}'
 
-        model = Face.objects.create(
-            user=request.user,
-            filename=f'{filename}',
-            image=image_path,
-            processed_image=f'images/{username}/processed/processed_{filename}'
-        )
-
-        data = {
-            'name': f'{filename}',
-            'original': f'images/{username}/live/{filename}',
-            'processed': f'images/{username}/processed/processed_{filename}',
-            }
-
-        return Response(data, status=status.HTTP_200_OK)
-    data = []
-
-    for file in request.FILES.values():
-
-        file.name = f'{UU_ID}_{file}'
-
-        model = Face.objects.create(
-            user=request.user,
-            filename=f'{file}',
-            image=file,
-        )
-
-        if 'processed' not in os.listdir(BASE_PATH):
-            os.mkdir(f'{BASE_PATH}/processed')
-
-        face = Detection(file, f'{BASE_PATH}/{file}', detect_eyes=True,
-                         save_path=f'{BASE_PATH}/processed/processed_{file}')
-        face.detect_faces()
-        face.save()
-
-        data.append({
-            'name': f'{file}',
-            'original': f'images/{username}/{file}',
-            'processed': f'images/{username}/processed/processed_{file}',
-            })
-        model.processed_image = f'images/{username}/processed/processed_{file}'
-        model.save()
+            processed_image = process_image(file, img_path=img_path,
+                                            save_path=save_path, user=request.user)
+            data.append(processed_image)
 
     return Response(data, status=status.HTTP_200_OK)
 
