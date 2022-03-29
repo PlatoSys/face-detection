@@ -14,7 +14,7 @@ from pathlib import Path
 import environ
 import os
 from datetime import timedelta
-
+import cloudinary
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,6 +23,12 @@ env = environ.Env(
     DEBUG=(bool, False)
 )
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+
+cloudinary.config( 
+  cloud_name = env('cloud_name'),
+  api_key = env('api_key'),
+  api_secret = env('api_secret')
+)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
@@ -44,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "corsheaders",
+    'cloudinary',
     'django_cleanup.apps.CleanupConfig',
     'rest_framework',
     'api',

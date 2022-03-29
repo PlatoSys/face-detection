@@ -12,18 +12,65 @@ from .models import Face
 from .machine_learning.face_detection import Detection
 from .serializers import UserSerializerWithToken, MyTokenObtainPairSerializer, CollectionSerializer
 from rest_framework.views import APIView
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+import urllib.request
+
+
 
 User = get_user_model()
 
+def directory_structure(username):
+    BASE_PATH = './backend/media/images'
+    if username not in os.listdir(BASE_PATH):
+        os.mkdir(f'{BASE_PATH}/{username}')
+        BASE_PATH = f'{BASE_PATH}/{username}'
+
+        if 'processed' not in os.listdir(BASE_PATH):
+            os.mkdir(f'{BASE_PATH}/processed')
+        if 'live' not in os.listdir(BASE_PATH):
+            os.mkdir(f'{BASE_PATH}/live')
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def faceDetection(request):
-
     username = str(request.user)
-
     UU_ID = str(uuid.uuid4())
     BASE_PATH = f'./backend/media/images/{username}'
+
+    directory_structure(username)
+
+    live_image = request.data.get('live_image')
+    if live_image:
+        data = {}
+        filename = request.data.get('filename')
+        filename = f'{UU_ID}_{filename}'
+        live_path = f'./backend/media/images/{username}/live/{filename}'
+        image_path = f'images/{username}/live/{filename}'
+
+        cld_response = cloudinary.uploader.upload(live_image)
+        urllib.request.urlretrieve(cld_response['url'], live_path)
+
+        face = Detection(image_path, f'{BASE_PATH}/live/{filename}', detect_eyes=True,
+                    save_path=f'{BASE_PATH}/processed/processed_{filename}')
+        face.detect_faces()
+        face.save()
+
+        model = Face.objects.create(
+            user=request.user,
+            filename=f'{filename}',
+            image=image_path,
+            processed_image=f'images/{username}/processed/processed_{filename}'
+        )
+
+        data = {
+            'name': f'{filename}',
+            'original': f'images/{username}/live/{filename}',
+            'processed': f'images/{username}/processed/processed_{filename}',
+            }
+
+        return Response(data, status=status.HTTP_200_OK)
     data = []
 
     for file in request.FILES.values():
