@@ -39,7 +39,7 @@ function CollectionsScreen() {
 
   const downloadAllProcessedImage = () => {
     collection.forEach((element) => {
-      downloadImage(element.filename, element.processed_image);
+      downloadImage(element.filename, element.processedImage);
     });
   };
 
@@ -102,7 +102,7 @@ function CollectionsScreen() {
                 </Card.Body>
               </Card>
               <Card style={{ width: "50%" }}>
-                <Card.Img variant="top" src={`${x.processed_image}`} />
+                <Card.Img variant="top" src={`${x.processedImage}`} />
                 <Card.Body
                   className="d-flex justify-content-between"
                   style={{ alignItems: "center" }}
@@ -118,7 +118,7 @@ function CollectionsScreen() {
                   <Button
                     variant="light"
                     className="btn btn-outline-success"
-                    onClick={() => downloadImage(x.filename, x.processed_image)}
+                    onClick={() => downloadImage(x.filename, x.processedImage)}
                   >
                     Download
                   </Button>

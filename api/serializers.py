@@ -54,4 +54,4 @@ class CollectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Face
-        fields = ['id', 'user', 'filename', 'image', 'processed_image']
+        fields = ['id', 'user', 'filename', 'image', 'processedImage']

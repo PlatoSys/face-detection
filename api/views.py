@@ -47,7 +47,7 @@ def process_image(file, img_path, save_path, user, live=False):
     face.detect_faces()
     face.save()
 
-    model.processed_image = processed_path
+    model.processedImage = processed_path
     model.save()
 
     return {

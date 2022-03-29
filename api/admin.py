@@ -11,7 +11,7 @@ admin.site.register(User, UserAdmin)
 
 
 class FaceAdmin(admin.ModelAdmin):
-    list_display = ('user', 'filename', 'image', 'processed_image')
+    list_display = ('user', 'filename', 'image', 'processedImage')
     search_fields = ('email', 'firstname')
 
 
