@@ -38,9 +38,10 @@ function HomeScreen() {
           </Col>
           <Col>
             <Image
-              loading="lazy"
-              src={"./images/detection_boy.jpg"}
+              src={"./images/detection_boy.avif"}
+              style={{aspectRatio: "attr(width) / attr(height)"}}
               alt="face detection"
+              width="640" height="360"
               fluid
             />
           </Col>
@@ -50,9 +51,10 @@ function HomeScreen() {
         <Row>
           <Col>
             <Image
-              loading="lazy"
-              src={"./images/team.jpg"}
+              src={"./images/team.avif"}
+              style={{aspectRatio: "attr(width) / attr(height)"}}
               alt="face detection"
+              width="640" height="360"
               fluid
             />
           </Col>
@@ -114,9 +116,10 @@ function HomeScreen() {
           </Col>
           <Col>
             <Image
-              loading="lazy"
-              src={"./images/draw.jpg"}
+              style={{aspectRatio: "attr(width) / attr(height)"}}
+              src={"./images/draw.avif"}
               alt="face detection"
+              width="640" height="360"
               fluid
             />
           </Col>
