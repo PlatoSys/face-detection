@@ -9,8 +9,8 @@ import Loader from "../components/Loader";
 
 function CollectionsScreen() {
   const navigate = useNavigate();
-  const [userData] = useContext(UserDataContext);
-  const [authToken] = useContext(AuthTokenContext);
+  const [userData, setUserData] = useContext(UserDataContext);
+  const [authToken, setAuthToken] = useContext(AuthTokenContext);
   const [loader, setLoader] = useState(false);
   const [collection, setCollection] = useState([]);
   const config = {
@@ -28,6 +28,13 @@ function CollectionsScreen() {
       axios.get("/api/collections/", config).then((response) => {
         setCollection(response.data);
         setLoader(false);
+      }).catch(error => {
+        if (error.response.status === 401){
+          setUserData();
+          setAuthToken();
+          localStorage.removeItem("token");
+          localStorage.removeItem("userData");
+        }
       });
     }
   }, [navigate]);
