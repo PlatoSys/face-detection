@@ -14,7 +14,6 @@ function Footer() {
 
   return (
     <footer ref={footer}>
-      <Container>
         <Row>
           <Col
             style={{ backgroundColor: "#1a1a1a", width: "100%", color: "#fff" }}
@@ -23,7 +22,6 @@ function Footer() {
             Copyright 0xDETECT{" "}
           </Col>
         </Row>
-      </Container>
     </footer>
   );
 }
