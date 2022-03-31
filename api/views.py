@@ -42,6 +42,7 @@ def process_image(file, img_path, save_path, user, live=False):
         user=user,
         filename=f'{file}',
         image=file if not live else f'images/{username}/live/{file}',
+        isLive=live
     )
 
     face = Detection(file, img_path=img_path, detect_eyes=True,
@@ -120,6 +121,11 @@ class CollectionsListView(APIView):
 
     def get(self, request, format=None):
         collections = Face.objects.filter(user=request.user)
+        
+        imgType = request.headers.get('ImageType')
+        if imgType != 'All' or not imgType:
+            isLive = True if imgType == 'Live' else False
+            collections = collections.filter(isLive=isLive)
 
         serializer = CollectionSerializer(collections, many=True)
 

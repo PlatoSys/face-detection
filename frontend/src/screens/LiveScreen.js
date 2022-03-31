@@ -34,11 +34,11 @@ function LiveScreen() {
     };
     axios.post("/api/detect/", formData, config).then((response) => {
       setProcessedImage(
-        `http://192.168.16.103:8000/media/${response.data.processed}`
+        `http://192.168.16.100:8000/media/${response.data.processed}`
       );
       setLoader(false);
     });
-  }, [webcamRef]);
+  }, [webcamRef, authToken]);
 
   return (
     <>

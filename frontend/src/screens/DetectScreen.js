@@ -21,7 +21,7 @@ function DetectScreen() {
     if (!userData) {
       navigate(`/login`);
     }
-  }, [navigate]);
+  }, [navigate, userData]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -57,7 +57,7 @@ function DetectScreen() {
   };
 
   const downloadImage = (name, url) => {
-    url = `http://192.168.16.103:8000/media/${url}`;
+    url = `http://192.168.16.100:8000/media/${url}`;
     saveAs(url, name);
   };
 

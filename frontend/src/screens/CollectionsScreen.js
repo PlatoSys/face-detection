@@ -6,6 +6,7 @@ import axios from "axios";
 import { Button, Row, Card } from "react-bootstrap";
 import { saveAs } from "file-saver";
 import Loader from "../components/Loader";
+import Filter from "../components/Filter";
 
 function CollectionsScreen() {
   const navigate = useNavigate();
@@ -13,34 +14,42 @@ function CollectionsScreen() {
   const [authToken, setAuthToken] = useContext(AuthTokenContext);
   const [loader, setLoader] = useState(false);
   const [collection, setCollection] = useState([]);
+  const [typeFilter, setTypeFilter] = useState("All");
   const config = {
     headers: {
       "Content-Type": "application/json",
       Authorization: authToken,
+      ImageType: typeFilter
+
     },
   };
 
+
   useEffect(() => {
+  
     if (!userData) {
       navigate(`/login`);
     } else {
       setLoader(true);
-      axios.get("/api/collections/", config).then((response) => {
-        setCollection(response.data);
-        setLoader(false);
-      }).catch(error => {
-        if (error.response.status === 401){
-          setUserData();
-          setAuthToken();
-          localStorage.removeItem("token");
-          localStorage.removeItem("userData");
-        }
-      });
+      axios
+        .get("/api/collections/", config)
+        .then((response) => {
+          setCollection(response.data);
+          setLoader(false);
+        })
+        .catch((error) => {
+          if (error.response.status === 401) {
+            setUserData();
+            setAuthToken();
+            localStorage.removeItem("token");
+            localStorage.removeItem("userData");
+          }
+        });
     }
-  }, [navigate]);
+  }, [navigate, setAuthToken, setUserData, userData, authToken, typeFilter]);
 
   const downloadImage = (name, url) => {
-    url = `http://192.168.16.103:8000${url}`;
+    url = `http://192.168.16.100:8000${url}`;
     saveAs(url, name);
   };
 
@@ -73,7 +82,8 @@ function CollectionsScreen() {
         <Loader />
       ) : (
         <div>
-          <div>
+          <div style={{ display: "flex", justifyContent:"space-between"}}>
+            <div>
             <Button
               type="button"
               variant="light"
@@ -92,8 +102,11 @@ function CollectionsScreen() {
             >
               Delete Images
             </Button>
+            </div>
+            <div style={{display: "flex", alignItems: "center"}}>
+            <Filter typeFilter={typeFilter} setTypeFilter={setTypeFilter} />
+            </div>
           </div>
-          {console.log(collection)}
           {collection.map((x) => (
             <Row key={x.filename} style={{ marginBottom: "15px" }}>
               <Card style={{ width: "50%" }}>
