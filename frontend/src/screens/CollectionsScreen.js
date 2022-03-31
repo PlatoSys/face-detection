@@ -19,14 +19,11 @@ function CollectionsScreen() {
     headers: {
       "Content-Type": "application/json",
       Authorization: authToken,
-      ImageType: typeFilter
-
+      ImageType: typeFilter,
     },
   };
 
-
   useEffect(() => {
-  
     if (!userData) {
       navigate(`/login`);
     } else {
@@ -82,29 +79,29 @@ function CollectionsScreen() {
         <Loader />
       ) : (
         <div>
-          <div style={{ display: "flex", justifyContent:"space-between"}}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>
-            <Button
-              type="button"
-              variant="light"
-              style={{ marginBottom: "15px" }}
-              className="btn btn-outline-success"
-              onClick={downloadAllProcessedImage}
-            >
-              Download Processed Images
-            </Button>
-            <Button
-              type="button"
-              variant="light"
-              className="btn btn-outline-danger"
-              style={{ marginBottom: "15px", marginLeft: "10px" }}
-              onClick={deleteAllImages}
-            >
-              Delete Images
-            </Button>
+              <Button
+                type="button"
+                variant="light"
+                style={{ marginBottom: "15px" }}
+                className="btn btn-outline-success"
+                onClick={downloadAllProcessedImage}
+              >
+                Download Processed Images
+              </Button>
+              <Button
+                type="button"
+                variant="light"
+                className="btn btn-outline-danger"
+                style={{ marginBottom: "15px", marginLeft: "10px" }}
+                onClick={deleteAllImages}
+              >
+                Delete Images
+              </Button>
             </div>
-            <div style={{display: "flex", alignItems: "center"}}>
-            <Filter typeFilter={typeFilter} setTypeFilter={setTypeFilter} />
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Filter typeFilter={typeFilter} setTypeFilter={setTypeFilter} />
             </div>
           </div>
           {collection.map((x) => (

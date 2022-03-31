@@ -39,9 +39,10 @@ function HomeScreen() {
           <Col>
             <Image
               src={"./images/detection_boy.avif"}
-              style={{aspectRatio: "attr(width) / attr(height)"}}
+              style={{ aspectRatio: "attr(width) / attr(height)" }}
               alt="face detection"
-              width="640" height="360"
+              width="640"
+              height="360"
               fluid
             />
           </Col>
@@ -52,9 +53,10 @@ function HomeScreen() {
           <Col>
             <Image
               src={"./images/team.avif"}
-              style={{aspectRatio: "attr(width) / attr(height)"}}
+              style={{ aspectRatio: "attr(width) / attr(height)" }}
               alt="face detection"
-              width="640" height="360"
+              width="640"
+              height="360"
               fluid
             />
           </Col>
@@ -116,10 +118,11 @@ function HomeScreen() {
           </Col>
           <Col>
             <Image
-              style={{aspectRatio: "attr(width) / attr(height)"}}
+              style={{ aspectRatio: "attr(width) / attr(height)" }}
               src={"./images/draw.avif"}
               alt="face detection"
-              width="640" height="360"
+              width="640"
+              height="360"
               fluid
             />
           </Col>
