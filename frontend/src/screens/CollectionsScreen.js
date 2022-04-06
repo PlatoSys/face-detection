@@ -46,7 +46,7 @@ function CollectionsScreen() {
   }, [navigate, setAuthToken, setUserData, userData, authToken, typeFilter]);
 
   const downloadImage = (name, url) => {
-    url = `http://192.168.16.100:8000${url}`;
+    url = `http://127.0.0.1:8000${url}`;
     saveAs(url, name);
   };
 
