@@ -121,7 +121,7 @@ class CollectionsListView(APIView):
 
     def get(self, request, format=None):
         collections = Face.objects.filter(user=request.user)
-        
+
         imgType = request.headers.get('ImageType')
         if imgType != 'All' or not imgType:
             isLive = True if imgType == 'Live' else False
