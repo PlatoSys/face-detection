@@ -3,7 +3,7 @@ import shutil
 import cv2
 from keras.models import load_model
 # from keras.models import model_from_json
-from mtcnn.mtcnn import MTCNN
+from mtcnn_cv2 import MTCNN
 detector = MTCNN()
 
 age_ranges = {
