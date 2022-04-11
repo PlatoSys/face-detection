@@ -33,7 +33,7 @@ function CollectionsScreen() {
     } else {
       setLoader(true);
       axios
-        .get("http://127.0.0.1:8000/api/collections/", config)
+        .get("/api/collections/", config)
         .then((response) => {
           setCollection(response.data);
           setLoader(false);
@@ -50,7 +50,7 @@ function CollectionsScreen() {
   }, [navigate, setAuthToken, setUserData, userData, authToken, typeFilter]);
 
   const downloadImage = (name, url) => {
-    url = `http://127.0.0.1:8000${url}`;
+    url = `http://172.23.0.2:8000${url}`;
     saveAs(url, name);
   };
 
@@ -62,7 +62,7 @@ function CollectionsScreen() {
 
   const deleteAllImages = () => {
     if (window.confirm("Delete All Images?")) {
-      axios.delete("http://127.0.0.1:8000/api/collections/", config).then((response) => {
+      axios.delete("/api/collections/", config).then((response) => {
         setCollection([]);
       });
     }
@@ -70,7 +70,7 @@ function CollectionsScreen() {
 
   const deleteImage = (id, filename) => {
     if (window.confirm(`Delete ${filename}?`)) {
-      axios.delete(`http://127.0.0.1:8000/api/collections/${id}`, config).then((response) => {
+      axios.delete(`/api/collections/${id}`, config).then((response) => {
         let filtered = collection.filter((x) => x.id !== id);
         setCollection(filtered);
       });

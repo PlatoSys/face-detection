@@ -38,7 +38,7 @@ function DetectScreen() {
       },
     };
     setLoader(true);
-    axios.post("http://127.0.0.1:8000/api/detect/", formData, config).then((response) => {
+    axios.post("/api/detect/", formData, config).then((response) => {
       setProcessedImages(response.data);
       setLoader(false);
     });
@@ -57,7 +57,7 @@ function DetectScreen() {
   };
 
   const downloadImage = (name, url) => {
-    url = `http://127.0.0.1:8000/media/${url}`;
+    url = `http://172.23.0.2:8000/media/${url}`;
     saveAs(url, name);
   };
 

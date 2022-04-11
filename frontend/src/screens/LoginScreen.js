@@ -27,7 +27,7 @@ function LoginScreen() {
   const submitHandler = (e) => {
     e.preventDefault();
     axios
-      .post("http://127.0.0.1:8000/api/auth/", {
+      .post("/api/auth/", {
         email,
         password,
       })

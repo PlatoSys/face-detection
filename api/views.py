@@ -24,6 +24,11 @@ User = get_user_model()
 
 def create_directory_structure(username):
     BASE_PATH = './backend/media/images'
+
+    if 'media' not in os.listdir('./backend'):
+        os.mkdir('./backend/media')
+        os.mkdir('./backend/media/images')
+
     if username not in os.listdir(BASE_PATH):
         os.mkdir(f'{BASE_PATH}/{username}')
         BASE_PATH = f'{BASE_PATH}/{username}'
