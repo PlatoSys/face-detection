@@ -83,7 +83,7 @@ def faceDetection(request):
         img_path = f'{BASE_PATH}/live/{file}'
         save_path = f'{BASE_PATH}/processed/processed_{file}'
 
-        cld_response = cloudinary.uploader.upload(live_image)
+        cld_response = cloudinary.uploader.upload(live_image, folder='live_images')
         urllib.request.urlretrieve(cld_response['url'], live_path)
 
         data = process_image(file, img_path=img_path, save_path=save_path,
