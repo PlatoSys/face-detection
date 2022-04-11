@@ -38,7 +38,7 @@ function DetectScreen() {
       },
     };
     setLoader(true);
-    axios.post("/api/detect/", formData, config).then((response) => {
+    axios.post("http://127.0.0.1:8000/api/detect/", formData, config).then((response) => {
       setProcessedImages(response.data);
       setLoader(false);
     });

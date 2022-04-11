@@ -20,6 +20,10 @@ function CollectionsScreen() {
       "Content-Type": "application/json",
       Authorization: authToken,
       ImageType: typeFilter,
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "true",
+      "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
+      "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
     },
   };
 
@@ -29,7 +33,7 @@ function CollectionsScreen() {
     } else {
       setLoader(true);
       axios
-        .get("/api/collections/", config)
+        .get("http://127.0.0.1:8000/api/collections/", config)
         .then((response) => {
           setCollection(response.data);
           setLoader(false);
@@ -58,7 +62,7 @@ function CollectionsScreen() {
 
   const deleteAllImages = () => {
     if (window.confirm("Delete All Images?")) {
-      axios.delete("/api/collections/", config).then((response) => {
+      axios.delete("http://127.0.0.1:8000/api/collections/", config).then((response) => {
         setCollection([]);
       });
     }
@@ -66,7 +70,7 @@ function CollectionsScreen() {
 
   const deleteImage = (id, filename) => {
     if (window.confirm(`Delete ${filename}?`)) {
-      axios.delete(`/api/collections/${id}`, config).then((response) => {
+      axios.delete(`http://127.0.0.1:8000/api/collections/${id}`, config).then((response) => {
         let filtered = collection.filter((x) => x.id !== id);
         setCollection(filtered);
       });

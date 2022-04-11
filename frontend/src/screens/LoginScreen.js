@@ -27,7 +27,7 @@ function LoginScreen() {
   const submitHandler = (e) => {
     e.preventDefault();
     axios
-      .post("/api/auth/", {
+      .post("http://127.0.0.1:8000/api/auth/", {
         email,
         password,
       })
@@ -40,6 +40,7 @@ function LoginScreen() {
             firstname: response.data.firstname,
           })
         );
+        setLoading(false)
         setAuthToken(`Bearer ${response.data.access}`);
         setUserData({
           email: response.data.email,
