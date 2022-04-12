@@ -29,3 +29,19 @@ services:
       DEBUG: "1"
     command: bash -c "python manage.py migrate &&
                       python manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    container_name: db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    restart: always
+    environment:
+      POSTGRES_DB: face_detection
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+volumes:
+  postgres_data:

@@ -16,7 +16,7 @@ function RegisterScreen() {
   };
 
   const navigate = useNavigate();
-  const [_, setAuthToken] = useContext(AuthTokenContext);
+  const [authToken, setAuthToken] = useContext(AuthTokenContext);
   const [userData, setUserData] = useContext(UserDataContext);
 
   const [firstname, setFirstname] = useState("");
@@ -44,23 +44,7 @@ function RegisterScreen() {
           config
         )
         .then((response) => {
-          setMessage(
-            `${response.data.firstname} has been Registered Successfully`
-          );
-          localStorage.setItem("token", `Bearer ${response.data.token}`);
-          localStorage.setItem(
-            "userData",
-            JSON.stringify({
-              email: response.data.email,
-              firstname: response.data.firstname,
-            })
-          );
-          setAuthToken(`Bearer ${response.data.access}`);
-          setUserData({
-            email: response.data.email,
-            firstname: response.data.firstname,
-          });
-          navigate("/");
+          navigate("/login");
         })
         .catch((err) => setError(err.response.data.detail));
       setLoading(false);
