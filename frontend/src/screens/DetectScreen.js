@@ -39,7 +39,6 @@ function DetectScreen() {
     };
     setLoader(true);
     axios.post("/api/detect/", formData, config).then((response) => {
-      console.log(response.data)
       setProcessedImages(response.data);
       setLoader(false);
     });

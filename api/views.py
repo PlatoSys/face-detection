@@ -23,21 +23,32 @@ from urllib.request import urlretrieve
 User = get_user_model()
 
 
-def create_directory_structure(username):
-    BASE_PATH = './backend/media/images'
+def process_image(filename, folder, user, tmp_path, isLive):
+    original_image = cloudinary.uploader.upload(filename, folder=f'{folder}/{user}', public_id=filename)
 
-    if 'media' not in os.listdir('./backend'):
-        os.mkdir('./backend/media')
-        os.mkdir('./backend/media/images')
+    face = Detection(filename, img_path=original_image['url'], detect_eyes=True,
+                    save_path=tmp_path)
+    face.detect_faces()
+    face.save()
+    
+    processed_image = cloudinary.uploader.upload(tmp_path, folder=f'processed_images/{user}', public_id=filename)
 
-    if username not in os.listdir(BASE_PATH):
-        os.mkdir(f'{BASE_PATH}/{username}')
-        BASE_PATH = f'{BASE_PATH}/{username}'
-
-        if 'processed' not in os.listdir(BASE_PATH):
-            os.mkdir(f'{BASE_PATH}/processed')
-        if 'live' not in os.listdir(BASE_PATH):
-            os.mkdir(f'{BASE_PATH}/live')
+    Face.objects.create(
+        user=user,
+        filename=f'{filename}',
+        image=original_image['url'],
+        processedImage=processed_image['url'],
+        originalPublicId=original_image['public_id'],
+        processedPublicId=processed_image['public_id'],
+        isLive=True
+    )
+    os.remove(tmp_path)
+    
+    return {
+        'name': f'{filename}',
+        'original': original_image['url'],
+        'processed': processed_image['url']
+    }
 
 
 @api_view(['POST'])
@@ -46,7 +57,6 @@ def faceDetection(request):
     username = str(request.user)
     UU_ID = str(uuid.uuid4())
     file = f'{UU_ID}_{request.data.get("filename")}'
-    img_path = f'./backend/tmp/{file}'
     tmp_path = f'./backend/tmp/processed_{file}'
 
     if 'tmp' not in os.listdir('./backend'):
@@ -56,9 +66,8 @@ def faceDetection(request):
     if live_image:
 
         original_image = cloudinary.uploader.upload(live_image, folder=f'live_images/{username}', public_id=file)
-        urlretrieve(original_image['url'], img_path)
 
-        face = Detection(file, img_path=img_path, detect_eyes=True,
+        face = Detection(file, img_path=original_image['url'], detect_eyes=True,
                         save_path=tmp_path)
         face.detect_faces()
         face.save()
@@ -80,19 +89,16 @@ def faceDetection(request):
             isLive=True
         )
         os.remove(tmp_path)
-        os.remove(img_path)
 
     else:
         data = []
         for file in request.FILES.values():
             file.name = f'{UU_ID}_{file}'
-            img_path = f'./backend/tmp/{file}'
             tmp_path = f'./backend/tmp/processed_{file}'
 
             original_image = cloudinary.uploader.upload(file, folder=f'original_images/{username}', public_id=f'{UU_ID}_{file}')
-            urlretrieve(original_image['url'], img_path)
 
-            face = Detection(file, img_path=img_path, detect_eyes=True,
+            face = Detection(file, img_path=original_image['url'], detect_eyes=True,
                             save_path=tmp_path)
             face.detect_faces()
             face.save()
@@ -116,7 +122,6 @@ def faceDetection(request):
                 })
                 
             os.remove(tmp_path)
-            os.remove(img_path)
 
     return Response(data, status=status.HTTP_200_OK)
 
