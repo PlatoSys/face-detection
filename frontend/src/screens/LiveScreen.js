@@ -34,7 +34,7 @@ function LiveScreen() {
     };
     axios.post("/api/detect/", formData, config).then((response) => {
       setProcessedImage(
-        `/media/${response.data.processed}`
+        response.data.processed
       );
       setLoader(false);
     });

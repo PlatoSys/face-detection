@@ -39,6 +39,7 @@ function DetectScreen() {
     };
     setLoader(true);
     axios.post("/api/detect/", formData, config).then((response) => {
+      console.log(response.data)
       setProcessedImages(response.data);
       setLoader(false);
     });
@@ -57,7 +58,6 @@ function DetectScreen() {
   };
 
   const downloadImage = (name, url) => {
-    url = `http://172.23.0.2:8000/media/${url}`;
     saveAs(url, name);
   };
 
@@ -99,7 +99,7 @@ function DetectScreen() {
           {processedImages.map((x) => (
             <Row key={x.original} style={{ marginBottom: "15px" }}>
               <Card style={{ width: "50%" }}>
-                <Card.Img variant="top" src={`media/${x.original}`} />
+                <Card.Img variant="top" src={`${x.original}`} />
                 <Card.Body
                   className="d-flex justify-content-between"
                   style={{ alignItems: "center" }}
@@ -111,7 +111,7 @@ function DetectScreen() {
                 </Card.Body>
               </Card>
               <Card style={{ width: "50%" }}>
-                <Card.Img variant="top" src={`media/${x.processed}`} />
+                <Card.Img variant="top" src={`${x.processed}`} />
                 <Card.Body
                   className="d-flex justify-content-between"
                   style={{ alignItems: "center" }}

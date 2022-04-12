@@ -50,7 +50,6 @@ function CollectionsScreen() {
   }, [navigate, setAuthToken, setUserData, userData, authToken, typeFilter]);
 
   const downloadImage = (name, url) => {
-    url = `http://172.23.0.2:8000${url}`;
     saveAs(url, name);
   };
 
@@ -61,7 +60,7 @@ function CollectionsScreen() {
   };
 
   const deleteAllImages = () => {
-    if (window.confirm("Delete All Images?")) {
+    if (window.confirm(`Delete ${typeFilter} Images?`)) {
       axios.delete("/api/collections/", config).then((response) => {
         setCollection([]);
       });

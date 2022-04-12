@@ -60,11 +60,12 @@ def upload_to_processed(instance, filename):
 
 
 class Face(models.Model):
-    id = models.AutoField(primary_key=True, editable=False)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     filename = models.CharField(max_length=200, null=True, blank=True)
-    image = models.ImageField(null=True, blank=True, upload_to=upload_to)
-    processedImage = models.ImageField(null=True, blank=True)
+    image = models.CharField(max_length=500, null=True, blank=True)
+    processedImage = models.CharField(max_length=500, null=True, blank=True)
+    originalPublicId = models.CharField(max_length=200, null=True, blank=True)
+    processedPublicId = models.CharField(max_length=200, null=True, blank=True)
     isLive = models.BooleanField(default=False)
     createdAt = models.DateTimeField(auto_now_add=True)
 

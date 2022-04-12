@@ -17,8 +17,6 @@ age_ranges = {
 }
 
 model = load_model('./api/machine_learning/final_cnn_model_checkpoint.h5')
-# cv2 = 'Test'
-# detector = "CNN"
 
 
 class Detection:
