@@ -5,6 +5,7 @@ from keras.models import load_model
 # from keras.models import model_from_json
 from mtcnn_cv2 import MTCNN
 detector = MTCNN()
+from skimage import io
 
 age_ranges = {
     0: '1-2',
@@ -17,17 +18,16 @@ age_ranges = {
 }
 
 model = load_model('./api/machine_learning/final_cnn_model_checkpoint.h5')
-# cv2 = 'Test'
-# detector = "CNN"
 
 
 class Detection:
     """Detection Class"""
     def __init__(self, filename, img_path, save_path, detect_eyes=False):
+        img = io.imread(img_path)
         self.filename = filename
         self.img_path = img_path
-        self.image = cv2.imread(img_path)
-        self.frame = cv2.imread(img_path)
+        self.image = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+        self.frame = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
         self.faces = detector.detect_faces(self.frame)
         self.save_path = save_path
         self.detect_eyes = detect_eyes
