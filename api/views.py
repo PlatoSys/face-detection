@@ -1,7 +1,6 @@
 import os
 import uuid
 from django.http import Http404
-from scipy.misc import face
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
