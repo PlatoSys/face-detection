@@ -41,3 +41,8 @@ jobs:
           python3 manage.py test && flake8
         env:
           SECRET_KEY: CI
+          DB_ENGINE: django.db.backends.postgresql
+          DB_NAME: face_detection
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DB_HOST: localhost
