@@ -1,6 +1,6 @@
 on: push
 jobs:
-  django-job:
+  postgres-job:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -9,19 +9,34 @@ jobs:
     container: node:latest
 
     services:
-      db:
-        image: postgres
+      postgres:
+        image: postgres:latest
         env:
-          DB_ENGINE: django.db.backends.postgresql
-          DB_NAME: face_detection
-          DB_USER: postgres
-          DB_PASSWORD: postgres
-          DB_HOST: localhost
+          POSTGRES_DB: postgres_db
+          POSTGRES_PASSWORD: postgres_password
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: postgres_user
         ports:
           - 5432:5432
-
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install PostgreSQL client
+        run: |
+          apt-get update
+          apt-get install --yes postgresql-client
+      - name: Query database
+        run: psql -h postgres -d postgres_db -U postgres_user -c 'SELECT 1;'
+        env:
+          PGPASSWORD: postgres_password
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -35,14 +50,17 @@ jobs:
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
       - name: Install Dependencies
         run: |
+          apt install -y python3-pip
+          python3 -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Run Tests
         run: |
           python3 manage.py test && flake8
         env:
+          PGPASSWORD: postgres_password
           SECRET_KEY: CI
-          DB_ENGINE: django.db.backends.postgresql
-          DB_NAME: face_detection
-          DB_USER: postgres
-          DB_PASSWORD: postgres
-          DB_HOST: localhost
+          DB_PASSWORD: postgres_password
+          DB_USER: postgres_user
+          DB_NAME: postgres_db
+          DB_HOST: postgres
+          DB_PORT: 5432
