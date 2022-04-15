@@ -8,6 +8,18 @@ jobs:
         python-version: [3.9]
     container: node:latest
 
+    services:
+      postgres:
+        image: postgres
+        env:
+          DB_ENGINE: django.db.backends.postgresql
+          DB_NAME: face_detection
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DB_HOST: postgres
+        ports:
+          - 5432:5432
+
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -29,8 +41,9 @@ jobs:
           python3 manage.py test && flake8
         env:
           SECRET_KEY: CI
-          DB_ENGINE: django.db.backends.sqlite3
-          DB_USER: test
-          DB_NAME: test
-          DB_HOST: localhost
+          DB_ENGINE: django.db.backends.postgresql
+          DB_NAME: face_detection
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DB_HOST: postgres
           DB_PORT: 5432
