@@ -103,26 +103,18 @@ CORS_ALLOWED_ORIGINS = [
 
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('DB_ENGINE'),
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get("DB_NAME"),
         'USER': os.environ.get("DB_USER"),
         'PASSWORD': os.environ.get("DB_PASSWORD"),
         'HOST': os.environ.get("DB_HOST"),
         'PORT': os.environ.get("DB_PORT"),
+        'TEST': {
+            'NAME': 'travis_ci_test',
+        }
     }
 }
 
-if os.environ.get('GITHUB_WORKFLOW'):
-    DATABASES = {
-        'default': {
-           'ENGINE': 'django.db.backends.postgresql',
-           'NAME': 'github_actions',
-           'USER': 'postgres',
-           'PASSWORD': 'postgres',
-           'HOST': '127.0.0.1',
-           'PORT': '5432',
-        }
-    }
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
