@@ -12,9 +12,10 @@ jobs:
       db:
         image: postgres
         env:
-          POSTGRES_DB: face_detection
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          DB_NAME: face_detection
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DB_HOST: localhost
         ports:
           - 5432:5432
 
