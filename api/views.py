@@ -13,24 +13,23 @@ from .machine_learning.face_detection import Detection
 from .serializers import (UserSerializerWithToken, MyTokenObtainPairSerializer,
                           CollectionSerializer)
 from rest_framework.views import APIView
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-from urllib.request import urlretrieve
-
+from cloudinary.api import delete_resources_by_prefix
+from cloudinary.uploader import upload as cld_upload, destroy as cld_destroy
 
 User = get_user_model()
 
 
-def process_image(filename, folder, user, tmp_path, isLive):
-    original_image = cloudinary.uploader.upload(filename, folder=f'{folder}/{user}', public_id=filename)
+def process_image(image, filename, folder, user, tmp_path, isLive):
+    original_image = cld_upload(image, folder=f'{folder}/{user}',
+                                public_id=filename)
 
-    face = Detection(filename, img_path=original_image['url'], detect_eyes=True,
-                    save_path=tmp_path)
+    face = Detection(filename, img_path=original_image['url'],
+                     detect_eyes=True, save_path=tmp_path)
     face.detect_faces()
     face.save()
-    
-    processed_image = cloudinary.uploader.upload(tmp_path, folder=f'processed_images/{user}', public_id=filename)
+
+    processed_image = cld_upload(tmp_path, folder=f'processed_images/{user}',
+                                 public_id=filename)
 
     Face.objects.create(
         user=user,
@@ -39,10 +38,10 @@ def process_image(filename, folder, user, tmp_path, isLive):
         processedImage=processed_image['url'],
         originalPublicId=original_image['public_id'],
         processedPublicId=processed_image['public_id'],
-        isLive=True
+        isLive=isLive
     )
     os.remove(tmp_path)
-    
+
     return {
         'name': f'{filename}',
         'original': original_image['url'],
@@ -53,7 +52,6 @@ def process_image(filename, folder, user, tmp_path, isLive):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def faceDetection(request):
-    username = str(request.user)
     UU_ID = str(uuid.uuid4())
     file = f'{UU_ID}_{request.data.get("filename")}'
     tmp_path = f'./backend/tmp/processed_{file}'
@@ -63,64 +61,18 @@ def faceDetection(request):
 
     live_image = request.data.get('live_image')
     if live_image:
-
-        original_image = cloudinary.uploader.upload(live_image, folder=f'live_images/{username}', public_id=file)
-
-        face = Detection(file, img_path=original_image['url'], detect_eyes=True,
-                        save_path=tmp_path)
-        face.detect_faces()
-        face.save()
-            
-        processed_image = cloudinary.uploader.upload(tmp_path, folder=f'processed_images/{username}', public_id=file)
-        data = {
-            'name': f'{file}',
-            'original': original_image['url'],
-            'processed': processed_image['url']
-        }
-
-        Face.objects.create(
-            user=request.user,
-            filename=f'{file}',
-            image=original_image['url'],
-            processedImage=processed_image['url'],
-            originalPublicId=original_image['public_id'],
-            processedPublicId=processed_image['public_id'],
-            isLive=True
-        )
-        os.remove(tmp_path)
-
+        data = process_image(live_image, file, 'live_images', request.user,
+                             tmp_path, True)
     else:
         data = []
         for file in request.FILES.values():
             file.name = f'{UU_ID}_{file}'
             tmp_path = f'./backend/tmp/processed_{file}'
 
-            original_image = cloudinary.uploader.upload(file, folder=f'original_images/{username}', public_id=f'{UU_ID}_{file}')
-
-            face = Detection(file, img_path=original_image['url'], detect_eyes=True,
-                            save_path=tmp_path)
-            face.detect_faces()
-            face.save()
-
-
-            processed_image = cloudinary.uploader.upload(tmp_path, folder=f'processed_images/{username}', public_id=f'{file}')
-
-            Face.objects.create(
-                user=request.user,
-                filename=f'{file}',
-                image=original_image['url'],
-                processedImage=processed_image['url'],
-                originalPublicId=original_image['public_id'],
-                processedPublicId=processed_image['public_id'],
-                isLive=False)
-
-            data.append({
-                'name': f'{file}',
-                'original': original_image['url'],
-                'processed': processed_image['url']
-                })
-                
-            os.remove(tmp_path)
+            instance_data = process_image(file, f'{UU_ID}_{file}',
+                                          'original_images', request.user,
+                                          tmp_path, False)
+            data.append(instance_data)
 
     return Response(data, status=status.HTTP_200_OK)
 
@@ -168,15 +120,15 @@ class CollectionsListView(APIView):
             filtered = filtered.filter(isLive=int(isLive))
 
             if isLive:
-                cloudinary.api.delete_resources_by_prefix(f'live_images/{request.user}/')
-            else: 
-                cloudinary.api.delete_resources_by_prefix(f'original_images/{request.user}/')
-            cloudinary.api.delete_resources_by_prefix(f'processed_images/{request.user}/')
+                delete_resources_by_prefix(f'live_images/{request.user}/')
+            else:
+                delete_resources_by_prefix(f'original_images/{request.user}/')
+            delete_resources_by_prefix(f'processed_images/{request.user}/')
         else:
-            cloudinary.api.delete_resources_by_prefix(f'processed_images/{request.user}/')
-            cloudinary.api.delete_resources_by_prefix(f'original_images/{request.user}/')
-            cloudinary.api.delete_resources_by_prefix(f'live_images/{request.user}/')
-        
+            delete_resources_by_prefix(f'processed_images/{request.user}/')
+            delete_resources_by_prefix(f'original_images/{request.user}/')
+            delete_resources_by_prefix(f'live_images/{request.user}/')
+
         filtered.delete()
 
         return Response(True, status=status.HTTP_200_OK)
@@ -196,11 +148,9 @@ class CollectionsDetailView(APIView):
         filter = Face.objects.filter(id=pk)
         first = filter.first()
 
-        cloudinary.uploader.destroy(first.originalPublicId)
-        cloudinary.uploader.destroy(first.processedPublicId)
+        cld_destroy(first.originalPublicId)
+        cld_destroy(first.processedPublicId)
 
         filter.delete()
 
         return Response(True, status=status.HTTP_200_OK)
-
-

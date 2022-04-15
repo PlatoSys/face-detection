@@ -1,11 +1,11 @@
 import os
 import shutil
 import cv2
+from skimage import io
 from keras.models import load_model
 # from keras.models import model_from_json
 from mtcnn_cv2 import MTCNN
 detector = MTCNN()
-from skimage import io
 
 age_ranges = {
     0: '1-2',

@@ -15,7 +15,7 @@ admin.site.register(User, UserAdmin)
 def delete_from_cloud(modeladmin, request, queryset):
 
     def remove_folders(path):
-        to_delete=[]
+        to_delete = []
         res = cloudinary.api.subfolders(path)
         for resource in res['folders']:
             to_delete.append(resource['path'])
@@ -28,15 +28,17 @@ def delete_from_cloud(modeladmin, request, queryset):
         cloudinary.uploader.destroy(instance.processedPublicId)
         instance.delete()
 
-    remove_folders('live_images')
-    remove_folders('processed_images')
-    remove_folders('original_images')
-
+    if Face.objects.count() == len(queryset):
+        remove_folders('live_images')
+        remove_folders('processed_images')
+        remove_folders('original_images')
 
 
 class FaceAdmin(admin.ModelAdmin):
-    list_display = ('user', 'filename', 'image', 'processedImage', 'isLive', 'originalPublicId')
+    list_display = ('user', 'filename', 'image', 'processedImage',
+                    'isLive', 'originalPublicId')
     search_fields = ('email', 'firstname')
     actions = [delete_from_cloud]
+
 
 admin.site.register(Face, FaceAdmin)
