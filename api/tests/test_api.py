@@ -1,5 +1,6 @@
 from django.test import TestCase
 
+
 class TestGuestActions(TestCase):
 
     def test_registration(self):
