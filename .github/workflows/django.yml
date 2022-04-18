@@ -64,7 +64,7 @@ jobs:
           DB_NAME: postgres_db
           DB_HOST: postgres
           DB_PORT: 5432
-          cloud_name: ds5eiqeh4
-          api_key: 634683619772389
-          api_secret: oOdDIu3z7UjlWOp09oiexoXV8Zg
+          cloud_name: TEST_NAME
+          api_key: TEST_KEY
+          api_secret: TEST_SECRET
           DEBUG: "1"
