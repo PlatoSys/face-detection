@@ -1,3 +1,4 @@
+from cgitb import text
 import os
 import shutil
 import cv2
@@ -7,15 +8,6 @@ from keras.models import load_model
 from mtcnn_cv2 import MTCNN
 detector = MTCNN()
 
-age_ranges = {
-    0: '1-2',
-    1: '3-9',
-    2: '10-20',
-    3: '21-27',
-    4: '28-45',
-    5: '46-65',
-    6: '66-116',
-}
 
 model = load_model('./api/machine_learning/final_cnn_model_checkpoint.h5')
 
@@ -31,10 +23,10 @@ class Detection:
         self.faces = detector.detect_faces(self.frame)
         self.save_path = save_path
         self.detect_eyes = detect_eyes
-        self.offset = 50
 
     def detect_faces(self):
         self._add_bounding_boxes()
+        self.predict_age()
 
     def _add_bounding_boxes(self):
         for result in self.faces:
@@ -51,37 +43,47 @@ class Detection:
         cv2.circle(self.frame, (keypoints['mouth_left']), 2, (0, 155, 255), 2)
         cv2.circle(self.frame, (keypoints['mouth_right']), 2, (0, 155, 255), 2)
 
-    def crop_faces(self):
-        index = 0
-        folder = f'cropped_{self.img_path}'[:-4]
+    def _put_text(self, text, x, y, scale):
+        font = cv2.FONT_HERSHEY_SIMPLEX
 
-        if folder in os.listdir('./'):
-            shutil.rmtree(folder)
-        os.mkdir(folder)
-        offset = self.offset
-        offset = 0
-
-        for face in self.faces:
-            index += 1
-            x, y, w, h = face['box']
-            cropped_face = self.frame[y - offset:y + h + offset,
-                                      x - offset:x + w + offset]
-            cv2.imwrite(f'{folder}/cropped_{index}.jpg', cropped_face)
+        cv2.putText(self.frame, text, (x, y - 10),
+                    font, 0.5, (0, 0, 255), 1, 2)
 
     def predict_age(self):
-        pass
-    #     folder = f'cropped_{self.img_path}'[:-4]
+        MODEL_MEAN_VALUES = (78.4263377603, 87.7689143744, 114.895847746)
+        GENDER_MODEL = './api/machine_learning/weights/deploy_gender.prototxt'
+        GENDER_PROTO = './api/machine_learning/weights/gender_net.caffemodel'
+        MODEL_MEAN_VALUES = (78.4263377603, 87.7689143744, 114.895847746)
+        GENDER_LIST = ['Male', 'Female']
 
-    #     cv2_image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
-    #     cv2_image = cv2.resize(cv2_image, (200, 200),
-    #                           interpolation = cv2.INTER_AREA)
+        gender_net = cv2.dnn.readNetFromCaffe(GENDER_MODEL, GENDER_PROTO)
 
-    #     data = np.array([cv2_image]).reshape(-1, 200,200, 1)
+        for face in self.faces:
+            x, y, w, h = face['box']
+            x_offset = int(w * 0.5)
+            y_offset = int(h * 0.5)
 
-    #     predicted = model.predict(data)
-    #     index = np.argmax(predicted)
+            x0 = 0 if x - x_offset <= 0 else x - x_offset
+            y0 = 0 if y - y_offset <= 0 else y - y_offset
 
-    #     return age_ranges[index]
+            cropped_face = self.frame[y0: y + h + y_offset,
+                                      x0: x + w + x_offset]
+            image = cropped_face.copy()
+
+            # Debuging
+            # cv2.imwrite(f'./test_{x_offset}_{y_offset}.jpg', image)
+
+            blob = cv2.dnn.blobFromImage(image=image, scalefactor=1.0, size=(
+                227, 227), mean=MODEL_MEAN_VALUES, swapRB=False, crop=False)
+
+            gender_net.setInput(blob)
+            gender_preds = gender_net.forward()
+            index = gender_preds[0].argmax()
+            gender = GENDER_LIST[index]
+            gender_confidence_score = gender_preds[0][index]
+
+            self._put_text(f'{gender}-{round(gender_confidence_score*100, 1)}%',
+                           x=x, y=y, scale=1)
 
     def predict_emotion(self):
         pass
