@@ -26,7 +26,15 @@ services:
       - ./:/backend
     environment:
       SECRET_KEY: "DOCKER"
+      DB_NAME: "face_detection"
+      DB_USER: "postgres"
+      DB_PASSWORD: "postgres"
+      DB_HOST: "db"
+      DB_PORT: 5432
       DEBUG: "1"
+      cloud_name: ds5eiqeh4
+      api_key: 634683619772389
+      api_secret: oOdDIu3z7UjlWOp09oiexoXV8Zg
     command: bash -c "python manage.py migrate &&
                       python manage.py runserver 0.0.0.0:8000"
     depends_on:
