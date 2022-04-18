@@ -1,6 +1,3 @@
-from cgitb import text
-import os
-import shutil
 import cv2
 from skimage import io
 from keras.models import load_model
@@ -43,11 +40,11 @@ class Detection:
         cv2.circle(self.frame, (keypoints['mouth_left']), 2, (0, 155, 255), 2)
         cv2.circle(self.frame, (keypoints['mouth_right']), 2, (0, 155, 255), 2)
 
-    def _put_text(self, text, x, y, scale):
+    def _put_text(self, text, x, y, scale=0.5):
         font = cv2.FONT_HERSHEY_SIMPLEX
 
         cv2.putText(self.frame, text, (x, y - 10),
-                    font, 0.5, (0, 0, 255), 1, 2)
+                    font, scale, (0, 0, 255), 1, 2)
 
     def predict_age(self):
         MODEL_MEAN_VALUES = (78.4263377603, 87.7689143744, 114.895847746)
@@ -80,9 +77,9 @@ class Detection:
             gender_preds = gender_net.forward()
             index = gender_preds[0].argmax()
             gender = GENDER_LIST[index]
-            gender_confidence_score = gender_preds[0][index]
+            confidence_score = gender_preds[0][index]
 
-            self._put_text(f'{gender}-{round(gender_confidence_score*100, 1)}%',
+            self._put_text(f'{gender}-{round(confidence_score*100, 1)}%',
                            x=x, y=y, scale=1)
 
     def predict_emotion(self):
