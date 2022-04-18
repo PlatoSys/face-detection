@@ -4,6 +4,10 @@
 
 In the project directory, you can run:
 
+### `cp sample.env .env`
+
+Fill the Cloud Values for using cloud services in .env file
+
 ### `docker-compose build`
 
 Builds nacessary images.
