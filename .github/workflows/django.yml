@@ -67,6 +67,6 @@ jobs:
           cloud_name: TEST_NAME
           api_key: TEST_KEY
           api_secret: TEST_SECRET
-          PROD: TEST_PROD
+          PROD: 0
           DEBUG: "1"
           CSRF_TRUSTED_ORIGINS: TEST_ORIGIN
