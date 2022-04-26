@@ -21,6 +21,7 @@ User = get_user_model()
 
 
 def process_image(image, filename, folder, user, tmp_path, isLive):
+    """Process Image"""
     original_image = cld_upload(image, folder=f'{folder}/{user}',
                                 public_id=filename)
 
@@ -53,6 +54,7 @@ def process_image(image, filename, folder, user, tmp_path, isLive):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def faceDetection(request):
+    """Face Detection View"""
     UU_ID = str(uuid.uuid4())
     file = f'{UU_ID}_{request.data.get("filename")}'
     tmp_path = f'./backend/tmp/processed_{file}'
@@ -79,11 +81,13 @@ def faceDetection(request):
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
+    """Token Obtain View"""
     serializer_class = MyTokenObtainPairSerializer
 
 
 @api_view(['POST'])
 def registerUser(request):
+    """Register User View"""
     data = request.data
     if User.objects.filter(email=data['email']):
         return Response({'detail': 'User Already Exists with this Email'},
@@ -99,8 +103,10 @@ def registerUser(request):
 
 @permission_classes([IsAuthenticated])
 class CollectionsListView(APIView):
+    """Collections List View"""
 
     def get(self, request):
+        """Get Images"""
         collections = Face.objects.filter(user=request.user)
 
         imgType = request.headers.get('ImageType')
@@ -113,6 +119,7 @@ class CollectionsListView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request):
+        """Delete Images"""
         imgType = request.headers.get('ImageType')
 
         filtered = Face.objects.filter(user=request.user)
@@ -137,15 +144,10 @@ class CollectionsListView(APIView):
 
 @permission_classes([IsAuthenticated])
 class CollectionsDetailView(APIView):
-
-    def get_object(self, pk):
-        try:
-            return Face.objects.get(pk=pk)
-        except Face.DoesNotExist:
-            raise Http404
+    """Collections Detail View"""
 
     def delete(self, request, pk):
-
+        """Delete Image"""
         filtered = Face.objects.filter(id=pk)
         first = filtered.first()
 

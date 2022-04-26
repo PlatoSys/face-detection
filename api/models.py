@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
 class UserManager(BaseUserManager):
+    """User Manager"""
 
     def create_user(self, email, firstname, password):
 
@@ -29,6 +30,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
+    """User Model"""
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
     firstname = models.CharField(max_length=30, unique=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -52,15 +54,8 @@ class User(AbstractBaseUser):
         return True
 
 
-def upload_to(instance, filename):
-    return f'./images/{str(instance.user)}/{filename}'
-
-
-def upload_to_processed(instance, filename):
-    return f'./images/{str(instance.user)}/processed/processed_{filename}'
-
-
 class Face(models.Model):
+    """Face Model"""
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     filename = models.CharField(max_length=200, blank=True)
     image = models.TextField(max_length=512, blank=True)

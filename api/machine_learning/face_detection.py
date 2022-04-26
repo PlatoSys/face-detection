@@ -12,7 +12,9 @@ model = load_model('./api/machine_learning/final_cnn_model_checkpoint.h5')
 
 class Detection:
     """Detection Class"""
+
     def __init__(self, filename, img_path, save_path, detect_eyes=False):
+        """Init"""
         img = io.imread(img_path)
         self.filename = filename
         self.img_path = img_path
@@ -24,11 +26,13 @@ class Detection:
         self.rectangle_colors = {}
 
     def detect_faces(self):
+        """Detect All Faces"""
         self.faces = [face for face in self.faces if face['confidence'] > 0.85]
         self.predict_age()
         self._add_bounding_boxes()
 
     def _add_bounding_boxes(self):
+        """Add Bounding Boxes to Faces"""
         for result in self.faces:
             x, y, w, h = result['box']
             x1, y1 = x + w, y + h
@@ -38,6 +42,7 @@ class Detection:
                 self._add_bounding_circles(result['keypoints'])
 
     def _add_bounding_circles(self, keypoints):
+        """Add Bounding Circles to face"""
         cv2.circle(self.frame, (keypoints['left_eye']), 2, (0, 155, 255), 2)
         cv2.circle(self.frame, (keypoints['right_eye']), 2, (0, 155, 255), 2)
         cv2.circle(self.frame, (keypoints['nose']), 2, (0, 155, 255), 2)
@@ -45,12 +50,14 @@ class Detection:
         cv2.circle(self.frame, (keypoints['mouth_right']), 2, (0, 155, 255), 2)
 
     def _put_text(self, text, x, y, scale, color):
+        """Put Text"""
         font = cv2.FONT_HERSHEY_SIMPLEX
 
         cv2.putText(self.frame, text, (x, y - 10),
                     font, scale, color.value, 2, 2)
 
     def predict_age(self):
+        """Predict Age"""
         MODEL_MEAN_VALUES = (78.4263377603, 87.7689143744, 114.895847746)
         GENDER_MODEL = './api/machine_learning/weights/deploy_gender.prototxt'
         GENDER_PROTO = './api/machine_learning/weights/gender_net.caffemodel'
@@ -88,11 +95,12 @@ class Detection:
                            x=x, y=y, scale=scale, color=color)
 
     def save(self):
+        """Save the image"""
         cv2.imwrite(self.save_path, self.frame)
 
 
 class Color(Enum):
-
+    """Color Enum"""
     RED = (0, 0, 255)
     GREEN = (0, 255, 0)
     BLUE = (255, 0, 0)

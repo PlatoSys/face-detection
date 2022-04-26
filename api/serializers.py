@@ -8,6 +8,7 @@ User = get_user_model()
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """Token Serializer"""
 
     def validate(self, attrs):
         data = super().validate(attrs)
@@ -21,6 +22,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """User Serializer"""
     name = serializers.SerializerMethodField(read_only=True)
     _id = serializers.SerializerMethodField(read_only=True)
     isAdmin = serializers.SerializerMethodField(read_only=True)
@@ -41,6 +43,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserSerializerWithToken(UserSerializer):
+    """User Serializer with Token"""
     token = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -53,7 +56,7 @@ class UserSerializerWithToken(UserSerializer):
 
 
 class CollectionSerializer(serializers.ModelSerializer):
-
+    """Collections Serializer"""
     class Meta:
         model = Face
         fields = ['id', 'user', 'filename', 'image', 'processedImage']
