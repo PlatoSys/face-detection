@@ -1,6 +1,3 @@
-import { Suspense, useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Container } from "react-bootstrap";
 import axios from "axios";
 import HomeScreen from "./screens/HomeScreen";
 import AboutScreen from "./screens/AboutScreen";
@@ -13,6 +10,9 @@ import RegisterScreen from "./screens/RegisterScreen";
 import Loader from "./components/Loader";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import React, { Suspense, useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Container } from "react-bootstrap";
 import { AuthTokenContext, UserDataContext } from "./store";
 import "./App.css";
 

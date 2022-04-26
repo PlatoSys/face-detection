@@ -1,3 +1,4 @@
+"""Main App for API"""
 from django.apps import AppConfig
 
 

@@ -1,3 +1,4 @@
+"""Admin Module for API"""
 from django.contrib import admin
 import cloudinary
 from .models import Face, User

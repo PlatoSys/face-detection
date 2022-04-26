@@ -1,3 +1,4 @@
+"""Face Detection Module"""
 from enum import Enum
 import cv2
 from skimage import io

@@ -1,18 +1,19 @@
+"""Views Module"""
 import os
 import uuid
 from django.http import Http404
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth import get_user_model
+from rest_framework.views import APIView
 from .models import Face
 from .machine_learning.face_detection import Detection
 from .serializers import (UserSerializerWithToken, MyTokenObtainPairSerializer,
                           CollectionSerializer)
-from rest_framework.views import APIView
 from cloudinary.api import delete_resources_by_prefix
 from cloudinary.uploader import upload as cld_upload, destroy as cld_destroy
 

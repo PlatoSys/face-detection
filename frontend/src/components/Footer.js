@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import React, { useRef } from "react";
+import { Row, Col } from "react-bootstrap";
 
 function Footer() {
   const footer = useRef();

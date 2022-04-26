@@ -1,3 +1,4 @@
+"""Urls Module"""
 from django.urls import path
 
 from .views import (CollectionsDetailView, MyTokenObtainPairView,
