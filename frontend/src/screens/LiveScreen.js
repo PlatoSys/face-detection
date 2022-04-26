@@ -33,9 +33,7 @@ function LiveScreen() {
       },
     };
     axios.post("/api/detect/", formData, config).then((response) => {
-      setProcessedImage(
-        response.data.processed
-      );
+      setProcessedImage(response.data.processed);
       setLoader(false);
     });
   }, [webcamRef, authToken]);

@@ -62,7 +62,7 @@ def upload_to_processed(instance, filename):
 
 class Face(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    filename = models.CharField(max_length=200, null=True, blank=True)
+    filename = models.CharField(max_length=200, blank=True)
     image = models.TextField(max_length=512, blank=True)
     processedImage = models.TextField(max_length=512, blank=True)
     originalPublicId = models.TextField(max_length=512, blank=True)

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Form, NavDropdown } from "react-bootstrap";
+import { NavDropdown } from "react-bootstrap";
 
 function Filter({ typeFilter, setTypeFilter }) {
   return (

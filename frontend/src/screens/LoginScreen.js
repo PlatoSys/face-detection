@@ -39,7 +39,7 @@ function LoginScreen() {
             firstname: response.data.firstname,
           })
         );
-        setLoading(false)
+        setLoading(false);
         setAuthToken(`Bearer ${response.data.access}`);
         setUserData({
           email: response.data.email,
