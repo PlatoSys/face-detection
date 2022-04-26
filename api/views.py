@@ -1,7 +1,6 @@
 """Views Module"""
 import os
 import uuid
-from django.http import Http404
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view, permission_classes
