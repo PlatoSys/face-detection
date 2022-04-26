@@ -2,7 +2,6 @@ from enum import Enum
 import cv2
 from skimage import io
 from keras.models import load_model
-# from keras.models import model_from_json
 from mtcnn_cv2 import MTCNN
 detector = MTCNN()
 
@@ -71,9 +70,6 @@ class Detection:
                                       x0: x + w + x_offset]
             image = cropped_face.copy()
 
-            # Debuging
-            # cv2.imwrite(f'./test_{x_offset}_{y_offset}.jpg', image)
-
             blob = cv2.dnn.blobFromImage(image=image, scalefactor=1.0, size=(
                 227, 227), mean=MODEL_MEAN_VALUES, swapRB=False, crop=False)
 
@@ -89,37 +85,6 @@ class Detection:
             self.rectangle_colors[f'{x}_{y}_{w}_{h}'] = color
             self._put_text(f'{gender}-{round(confidence_score*100, 1)}%',
                            x=x, y=y, scale=scale, color=color)
-
-    def predict_emotion(self):
-        pass
-    #     emotion_dict = {
-    #         0: "Angry",
-    #         1: "Disgusted",
-    #         2: "Fearful",
-    #         3: "Happy",
-    #         4: "Neutral",
-    #         5: "Sad",
-    #         6: "Surprised"
-    #     }
-
-    #     files = f'cropped_{self.img_path[:-4]}'
-    #     json_file = open('emotion_model.json', 'r')
-    #     loaded_model_json = json_file.read()
-    #     emotion_model = model_from_json(loaded_model_json)
-
-    #     emotion_model.load_weights("emotion_model.h5")
-
-    #     for file in os.listdir(f'./{files}'):
-    #         cropped_img = cv2.imread(f'./{files}/{file}')
-    #         cropped_img = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2GRAY)
-    #         cropped_img = cv2.resize(cropped_img, (48, 48))
-
-    #         cropped_img = np.expand_dims(cropped_img, axis=0)
-    #         predicted = emotion_model.predict(cropped_img)
-
-    #         maxindex = int(np.argmax(predicted))
-    #         print(emotion_dict[maxindex])
-    #     shutil.rmtree(files)
 
     def save(self):
         cv2.imwrite(self.save_path, self.frame)

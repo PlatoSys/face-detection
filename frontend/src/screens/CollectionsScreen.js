@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useContext } from "react";
-import { AuthTokenContext, UserDataContext } from "../store";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Button, Row, Card } from "react-bootstrap";
-import { saveAs } from "file-saver";
 import Loader from "../components/Loader";
 import Filter from "../components/Filter";
+import React, { useEffect, useState, useContext } from "react";
+import { AuthTokenContext, UserDataContext } from "../store";
+import { useNavigate } from "react-router-dom";
+import { Button, Row, Card } from "react-bootstrap";
+import { saveAs } from "file-saver";
 
 function CollectionsScreen() {
   const navigate = useNavigate();
@@ -61,7 +60,7 @@ function CollectionsScreen() {
 
   const deleteAllImages = () => {
     if (window.confirm(`Delete ${typeFilter} Images?`)) {
-      axios.delete("/api/collections/", config).then((response) => {
+      axios.delete("/api/collections/", config).then(() => {
         setCollection([]);
       });
     }
@@ -69,8 +68,8 @@ function CollectionsScreen() {
 
   const deleteImage = (id, filename) => {
     if (window.confirm(`Delete ${filename}?`)) {
-      axios.delete(`/api/collections/${id}`, config).then((response) => {
-        let filtered = collection.filter((x) => x.id !== id);
+      axios.delete(`/api/collections/${id}`, config).then(() => {
+        const filtered = collection.filter((x) => x.id !== id);
         setCollection(filtered);
       });
     }

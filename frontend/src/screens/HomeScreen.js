@@ -73,7 +73,7 @@ function HomeScreen() {
             <Row>
               <p>
                 User is able to keep collections for future uses and filter them
-                by date. It's free of use for certain amount of data.
+                by date. It&apos;s free of use for certain amount of data.
               </p>
             </Row>
             <Row>

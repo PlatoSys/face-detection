@@ -1,12 +1,10 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import FormContainer from "../components/FormContainer";
 import axios from "axios";
-import { useContext } from "react";
-import { AuthTokenContext, UserDataContext } from "../store";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button, Col, Form, Row } from "react-bootstrap";
 
 function RegisterScreen() {
   const config = {
@@ -16,8 +14,6 @@ function RegisterScreen() {
   };
 
   const navigate = useNavigate();
-  const [authToken, setAuthToken] = useContext(AuthTokenContext);
-  const [userData, setUserData] = useContext(UserDataContext);
 
   const [firstname, setFirstname] = useState("");
   const [email, setEmail] = useState("");
@@ -43,7 +39,7 @@ function RegisterScreen() {
           },
           config
         )
-        .then((response) => {
+        .then(() => {
           navigate("/login");
         })
         .catch((err) => setError(err.response.data.detail));
@@ -52,7 +48,7 @@ function RegisterScreen() {
   };
 
   return (
-    <React.Fragment>
+    <div>
       <FormContainer>
         {loading && <Loader />}
 
@@ -116,7 +112,7 @@ function RegisterScreen() {
           </Col>
         </Row>
       </FormContainer>
-    </React.Fragment>
+    </div>
   );
 }
 

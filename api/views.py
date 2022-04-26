@@ -99,24 +99,24 @@ def registerUser(request):
 @permission_classes([IsAuthenticated])
 class CollectionsListView(APIView):
 
-    def get(self, request, format=None):
+    def get(self, request):
         collections = Face.objects.filter(user=request.user)
 
         imgType = request.headers.get('ImageType')
         if imgType != 'All' or not imgType:
-            isLive = True if imgType == 'Live' else False
+            isLive = bool(imgType == 'Live')
             collections = collections.filter(isLive=isLive)
 
         serializer = CollectionSerializer(collections, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def delete(self, request, format=None):
+    def delete(self, request):
         imgType = request.headers.get('ImageType')
 
         filtered = Face.objects.filter(user=request.user)
         if imgType != 'All':
-            isLive = True if imgType == 'Live' else False
+            isLive = bool(imgType == 'Live')
             filtered = filtered.filter(isLive=int(isLive))
 
             if isLive:
@@ -143,14 +143,14 @@ class CollectionsDetailView(APIView):
         except Face.DoesNotExist:
             raise Http404
 
-    def delete(self, request, pk, format=None):
+    def delete(self, request, pk):
 
-        filter = Face.objects.filter(id=pk)
-        first = filter.first()
+        filtered = Face.objects.filter(id=pk)
+        first = filtered.first()
 
         cld_destroy(first.originalPublicId)
         cld_destroy(first.processedPublicId)
 
-        filter.delete()
+        filtered.delete()
 
         return Response(True, status=status.HTTP_200_OK)

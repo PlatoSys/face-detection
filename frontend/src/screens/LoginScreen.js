@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import FormContainer from "../components/FormContainer";
 import axios from "axios";
-import { useContext } from "react";
 import { AuthTokenContext, UserDataContext } from "../store";
 
 function LoginScreen() {
@@ -52,7 +51,7 @@ function LoginScreen() {
   };
 
   return (
-    <React.Fragment>
+    <div>
       <FormContainer>
         <h1>Sign In</h1>
         {error && <Message variant="danger">{error}</Message>}
@@ -88,7 +87,7 @@ function LoginScreen() {
           </Col>
         </Row>
       </FormContainer>
-    </React.Fragment>
+    </div>
   );
 }
 
