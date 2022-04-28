@@ -7,7 +7,7 @@ class UserManager(BaseUserManager):
     """User Manager"""
 
     def create_user(self, email, firstname, password):
-
+        """Create User"""
         user = self.model(
             email=self.normalize_email(email=email),
             firstname=firstname,
@@ -17,6 +17,7 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, firstname, password):
+        """Create Superuser"""
         user = self.create_user(
             email=self.normalize_email(email=email),
             firstname=firstname,
@@ -31,6 +32,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     """User Model"""
+
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
     firstname = models.CharField(max_length=30, unique=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -56,6 +58,7 @@ class User(AbstractBaseUser):
 
 class Face(models.Model):
     """Face Model"""
+
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     filename = models.CharField(max_length=200, blank=True)
     image = models.TextField(max_length=512, blank=True)

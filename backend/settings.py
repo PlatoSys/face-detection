@@ -23,9 +23,9 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 env = environ.Env(
     DEBUG=(bool, False)
 )
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-cloudinary.config( 
+cloudinary.config(
   cloud_name = env('cloud_name'),
   api_key = env('api_key'),
   api_secret = env('api_secret')

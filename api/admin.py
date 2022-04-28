@@ -7,6 +7,7 @@ from .models import Face, User
 @register(User)
 class UserAdmin(ModelAdmin):
     """User Admin"""
+
     list_display = ('email', 'firstname',  'is_active')
     search_fields = ('email', 'firstname')
 
@@ -14,7 +15,9 @@ class UserAdmin(ModelAdmin):
 @action(description='Delete From Cloudinary')
 def delete_from_cloud(modeladmin, request, queryset):
     """Delete Images From Cloudinary"""
+
     def remove_folders(path):
+        """Remove Empty Folders"""
         to_delete = []
         res = cloudinary.api.subfolders(path)
         for resource in res['folders']:
@@ -37,6 +40,7 @@ def delete_from_cloud(modeladmin, request, queryset):
 @register(Face)
 class FaceAdmin(ModelAdmin):
     """Face Admin"""
+
     list_display = ('user', 'filename', 'image', 'processedImage',
                     'isLive', 'originalPublicId')
     search_fields = ('email', 'firstname')

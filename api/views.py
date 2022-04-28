@@ -81,6 +81,7 @@ def faceDetection(request):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     """Token Obtain View"""
+
     serializer_class = MyTokenObtainPairSerializer
 
 
