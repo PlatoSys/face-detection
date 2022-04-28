@@ -60,7 +60,7 @@ function CollectionsScreen() {
   };
 
   const deleteAllImages = () => {
-    const deleteConfirm = confirm(`Delete ${typeFilter} Images?`)
+    const deleteConfirm = window.confirm(`Delete ${typeFilter} Images?`)
     if (deleteConfirm) {
       axios.delete("/api/collections/", config).then(() => {
         setCollection([]);
@@ -69,7 +69,7 @@ function CollectionsScreen() {
   };
 
   const deleteImage = (id, filename) => {
-    const deleteConfirm = confirm(`Delete ${filename}?`)
+    const deleteConfirm = window.confirm(`Delete ${filename}?`)
     if (deleteConfirm) {
       axios.delete(`/api/collections/${id}`, config).then(() => {
         const filtered = collection.filter((x) => x.id !== id);
