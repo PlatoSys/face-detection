@@ -44,13 +44,13 @@ function DetectScreen() {
     });
   };
 
-  const uploadFileHandler = async (e) => {
+  const uploadFileHandler = (e) => {
     const file = e.target.files[0];
     setUploadImages(uploadImages.concat([file]));
     setImagesCount(imagesCount + 1);
   };
 
-  const resetHandler = (e) => {
+  const resetHandler = () => {
     setImagesCount(1);
     setProcessedImages([]);
     setUploadImages([]);
@@ -131,8 +131,7 @@ function DetectScreen() {
               type="hidden"
               placeholder="Enter Image"
               value={image}
-              onChange={(e) => setImage(e.target.value)}
-            ></Form.Control>
+              onChange={(e) => setImage(e.target.value)} />
             <Form.Group controlId="image" className="mb-3">
               <Form.Control
                 type="file"

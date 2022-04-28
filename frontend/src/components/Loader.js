@@ -14,7 +14,7 @@ function Loader() {
         display: "block",
       }}
     >
-      <span className="sr-only"></span>
+      <span className="sr-only" />
     </Spinner>
   );
 }

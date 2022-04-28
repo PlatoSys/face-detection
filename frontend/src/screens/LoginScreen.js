@@ -63,8 +63,7 @@ function LoginScreen() {
               type="email"
               placeholder="Enter Email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            ></Form.Control>
+              onChange={(e) => setEmail(e.target.value)} />
           </Form.Group>
           <Form.Group controlId="password" className="my-2">
             <Form.Label>Password</Form.Label>
@@ -73,8 +72,7 @@ function LoginScreen() {
               placeholder="Enter password"
               value={password}
               autoComplete="on"
-              onChange={(e) => setPassword(e.target.value)}
-            ></Form.Control>
+              onChange={(e) => setPassword(e.target.value)} />
           </Form.Group>
           <Button type="submit" variant="primary" className="my-2">
             Sign in
