@@ -69,7 +69,7 @@ function RegisterScreen() {
 
           <Form.Group controlId="email" className="my-2">
             <Form.Label>Email Address</Form.Label>
-            <
+            <Form.Control
               required
               type="email"
               autoComplete={"off"}
@@ -79,7 +79,7 @@ function RegisterScreen() {
           </Form.Group>
           <Form.Group controlId="password" className="my-2">
             <Form.Label>Password</Form.Label>
-            <
+            <Form.Control
               required
               type="password"
               autoComplete={"off"}
@@ -89,7 +89,7 @@ function RegisterScreen() {
           </Form.Group>
           <Form.Group controlId="passwordConfirm" className="my-2">
             <Form.Label>Confirm Password</Form.Label>
-            <
+            <Form.Control
               required
               type="password"
               placeholder="Confirm password"
