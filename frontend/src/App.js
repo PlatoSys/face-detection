@@ -7,6 +7,7 @@ import CollectionsScreen from "./screens/CollectionsScreen";
 import DetectScreen from "./screens/DetectScreen";
 import LiveScreen from "./screens/LiveScreen";
 import RegisterScreen from "./screens/RegisterScreen";
+import AccountScreen from "./screens/AccountScreen";
 import Loader from "./components/Loader";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -38,6 +39,7 @@ function App() {
                   <Route path="/collections" element={<CollectionsScreen />} />
                   <Route path="/about" element={<AboutScreen />} />
                   <Route path="/live" element={<LiveScreen />} />
+                  <Route path="/account" element={<AccountScreen />} />
                   <Route
                     path="/documentation"
                     element={<DocumentationScreen />}

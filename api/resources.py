@@ -8,6 +8,7 @@ class FaceResource(ModelResource):
         column_name='user',
         attribute='user__email',
     )
+
     class Meta:
         model = Face
         exclude = ('id', 'created_at')

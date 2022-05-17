@@ -5,6 +5,7 @@ import cloudinary
 from .models import Face, User
 from .resources import FaceResource
 
+
 @register(User)
 class UserAdmin(ModelAdmin):
     """User Admin"""
