@@ -49,10 +49,10 @@ class User(AbstractBaseUser):
     def __str__(self) -> str:
         return self.email
 
-    def has_perm(self):
+    def has_perm(self, perms=None):
         return self.is_admin
 
-    def has_module_perms(self):
+    def has_module_perms(self, perms=None):
         return True
 
 
