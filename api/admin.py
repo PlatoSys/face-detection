@@ -1,8 +1,9 @@
 """Admin Module for API"""
 from django.contrib.admin import ModelAdmin, register, action
+from import_export.admin import ImportExportActionModelAdmin
 import cloudinary
 from .models import Face, User
-
+from .resources import FaceResource
 
 @register(User)
 class UserAdmin(ModelAdmin):
@@ -38,10 +39,11 @@ def delete_from_cloud(modeladmin, request, queryset):
 
 
 @register(Face)
-class FaceAdmin(ModelAdmin):
+class FaceAdmin(ImportExportActionModelAdmin):
     """Face Admin"""
 
     list_display = ('user', 'filename', 'image', 'processedImage',
                     'isLive', 'originalPublicId')
     search_fields = ('email', 'firstname')
     actions = [delete_from_cloud]
+    resource_class = FaceResource
