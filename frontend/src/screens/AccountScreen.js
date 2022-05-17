@@ -13,14 +13,13 @@ function AccountScreen() {
     if (!userData) {
       navigate(`/login`);
     }
-    console.log(userData)
   }, [userData]);
 
   return (
     <div>
       <Card>
         <Card.Body>
-          <Card.Title style={{fontSize: "25px"}}>User Data</Card.Title>
+          <Card.Title className="fs-1">User Data</Card.Title>
           <Card.Title>Email: {userData.email}</Card.Title>
           <Card.Title>Firstname: {userData.firstname}</Card.Title>
           <Card.Title>{displayToken}</Card.Title>
@@ -28,7 +27,6 @@ function AccountScreen() {
             !displayToken ? (<Button onClick={() => setDisplayToken(authToken)}>Reveal Token</Button>) : (<Button onClick={() => setDisplayToken("")}>Hide Token</Button>)
 
           }
-          
         </Card.Body>
       </Card>
 
