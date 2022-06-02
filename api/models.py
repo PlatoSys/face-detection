@@ -67,6 +67,7 @@ class Face(models.Model):
     processedPublicId = models.TextField(max_length=512, blank=True)
     isLive = models.BooleanField(default=False)
     createdAt = models.DateTimeField(auto_now_add=True)
+    landmarks = models.JSONField(default=dict)
 
     def __str__(self) -> str:
         return f'{self.filename}'

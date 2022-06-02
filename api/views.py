@@ -39,14 +39,16 @@ def process_image(image, filename, folder, user, tmp_path, isLive):
         processedImage=processed_image['url'],
         originalPublicId=original_image['public_id'],
         processedPublicId=processed_image['public_id'],
-        isLive=isLive
+        isLive=isLive,
+        landmarks=face.landmarks
     )
     os.remove(tmp_path)
 
     return {
         'name': f'{filename}',
         'original': original_image['url'],
-        'processed': processed_image['url']
+        'processed': processed_image['url'],
+        'landmarks': face.landmarks
     }
 
 

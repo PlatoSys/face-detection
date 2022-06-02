@@ -4,7 +4,6 @@ import cv2
 from skimage import io
 from keras.models import load_model
 from mtcnn_cv2 import MTCNN
-detector = MTCNN()
 
 
 model = load_model('./api/machine_learning/final_cnn_model_checkpoint.h5')
@@ -13,6 +12,8 @@ model = load_model('./api/machine_learning/final_cnn_model_checkpoint.h5')
 class Detection:
     """Detection Class"""
 
+    detector = MTCNN()
+
     def __init__(self, filename, img_path, save_path, detect_eyes=False):
         """Init"""
         img = io.imread(img_path)
@@ -20,7 +21,7 @@ class Detection:
         self.img_path = img_path
         self.image = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
         self.frame = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
-        self.faces = detector.detect_faces(self.frame)
+        self.faces = self.detector.detect_faces(self.frame)
         self.save_path = save_path
         self.detect_eyes = detect_eyes
         self.rectangle_colors = {}
@@ -93,6 +94,43 @@ class Detection:
             self.rectangle_colors[f'{x}_{y}_{w}_{h}'] = color
             self._put_text(f'{gender}-{round(confidence_score*100, 1)}%',
                            x=x, y=y, scale=scale, color=color)
+
+    @property
+    def landmarks(self):
+        return [self.to_json(face) for face in self.faces]
+
+    @staticmethod
+    def to_json(face):
+        return  {
+                'box': {
+                    'x': face['box'][0],
+                    'y': face['box'][1],
+                    'width': face['box'][2],
+                    'height': face['box'][3]
+                },
+                'landmarks': {
+                    'left_eye': {
+                        'x': face['keypoints']['left_eye'][0],
+                        'y': face['keypoints']['left_eye'][1]
+                    },
+                    'right_eye': {
+                        'x': face['keypoints']['right_eye'][0],
+                        'y': face['keypoints']['right_eye'][1]
+                    },
+                    'mouth_left': {
+                        'x': face['keypoints']['mouth_left'][0],
+                        'y': face['keypoints']['mouth_left'][1]
+                    },
+                    'mouth_right': {
+                        'x': face['keypoints']['mouth_right'][0],
+                        'y': face['keypoints']['mouth_right'][1]
+                    },
+                    'nose': {
+                        'x': face['keypoints']['nose'][0],
+                        'y': face['keypoints']['nose'][1]
+                    },
+                }            
+            }
 
     def save(self):
         """Save the image"""

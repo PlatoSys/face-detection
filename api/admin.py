@@ -43,8 +43,7 @@ def delete_from_cloud(modeladmin, request, queryset):
 class FaceAdmin(ImportExportActionModelAdmin):
     """Face Admin"""
 
-    list_display = ('user', 'filename', 'image', 'processedImage',
-                    'isLive', 'originalPublicId')
+    list_display = ('user', 'filename', 'image', 'processedImage', 'isLive')
     search_fields = ('email', 'firstname')
     actions = [delete_from_cloud]
     resource_class = FaceResource
