@@ -6,6 +6,7 @@ import { AuthTokenContext, UserDataContext } from "../store";
 import { useNavigate } from "react-router-dom";
 import { Button, Row, Card } from "react-bootstrap";
 import { saveAs } from "file-saver";
+import { CSVLink } from "react-csv";
 
 function CollectionsScreen() {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ function CollectionsScreen() {
   const [authToken, setAuthToken] = useContext(AuthTokenContext);
   const [loader, setLoader] = useState(false);
   const [collection, setCollection] = useState([]);
+  const [csvCollection, setCsvCollection] = useState([]);
   const [typeFilter, setTypeFilter] = useState("All");
   const config = {
     headers: {
@@ -37,6 +39,7 @@ function CollectionsScreen() {
         .then((response) => {
           setCollection(response.data);
           setLoader(false);
+          csvFormatter(response.data);
         })
         .catch((error) => {
           if (error.response.status === 401) {
@@ -49,6 +52,15 @@ function CollectionsScreen() {
     }
   }, [navigate, setAuthToken, setUserData, userData, authToken, typeFilter]);
 
+  const csvFormatter = (data) => {
+    const copy = data;
+    copy.forEach(element => {
+        delete element.landmarks;
+        element.user = userData.email;
+    });
+    setCsvCollection(copy);
+}
+
   const downloadImage = (name, url) => {
     saveAs(url, name);
   };
@@ -60,7 +72,7 @@ function CollectionsScreen() {
   };
 
   const deleteAllImages = () => {
-    const deleteConfirm = window.confirm(`Delete ${typeFilter} Images?`)
+    const deleteConfirm = window.confirm(`Delete ${typeFilter} Images?`);
     if (deleteConfirm) {
       axios.delete("/api/collections/", config).then(() => {
         setCollection([]);
@@ -69,7 +81,7 @@ function CollectionsScreen() {
   };
 
   const deleteImage = (id, filename) => {
-    const deleteConfirm = window.confirm(`Delete ${filename}?`)
+    const deleteConfirm = window.confirm(`Delete ${filename}?`);
     if (deleteConfirm) {
       axios.delete(`/api/collections/${id}`, config).then(() => {
         const filtered = collection.filter((x) => x.id !== id);
@@ -94,6 +106,20 @@ function CollectionsScreen() {
                 onClick={downloadAllProcessedImage}
               >
                 Download Processed Images
+              </Button>
+              <Button
+                type="button"
+                variant="light"
+                className="btn btn-outline-info"
+                style={{ marginBottom: "15px", marginLeft: "10px" }}
+              >
+                <CSVLink
+                  style={{ textDecoration: "none", color: "inherit" }}
+                  filename={`${new Date()}.csv`}
+                  data={csvCollection}
+                >
+                  Download CSV
+                </CSVLink>
               </Button>
               <Button
                 type="button"
