@@ -1,6 +1,6 @@
 import React from "react";
-import { Card, Image } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 function SetupDoc() {
   return (

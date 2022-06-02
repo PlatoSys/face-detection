@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Col, Row } from "react-bootstrap";
-import { Nav } from "react-bootstrap";
+import { Col, Row, Nav } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import BaseDoc from "../components/DocumentationComponents/BaseDoc";
 import IntroductionDoc from "../components/DocumentationComponents/IntroductionDoc";
