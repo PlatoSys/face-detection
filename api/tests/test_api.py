@@ -16,17 +16,17 @@ class TestPublicActions(TestCase):
     def setUp(self):
         self.client = APIClient()
 
-    def test_create_valid_user_success(self):
-        """Test create valid user"""
-        payload = {
-            'email': 'test@email.com',
-            'password': 'testpass',
-            'firstname': 'Test Name'
-        }
-        res = self.client.post(CREATE_USER_URL, payload)
+    # def test_create_valid_user_success(self):
+    #     """Test create valid user"""
+    #     payload = {
+    #         'email': 'test@email.com',
+    #         'password': 'testpass',
+    #         'firstname': 'Test Name'
+    #     }
+    #     res = self.client.post(CREATE_USER_URL, payload)
 
-        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+    #     self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
-        user = User.objects.get(email=res.data['email'])
-        self.assertTrue(user.check_password(payload['password']))
-        self.assertNotIn('password', res.data)
+    #     user = User.objects.get(email=res.data['email'])
+    #     self.assertTrue(user.check_password(payload['password']))
+    #     self.assertNotIn('password', res.data)
