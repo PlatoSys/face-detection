@@ -3,6 +3,7 @@ import { Col, Row, Nav } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import BaseDoc from "../components/DocumentationComponents/BaseDoc";
 import IntroductionDoc from "../components/DocumentationComponents/IntroductionDoc";
+import PrepareAppDoc from "../components/DocumentationComponents/PrepareAppDoc";
 import SetupDoc from "../components/DocumentationComponents/SetupDoc";
 
 function DocumentationScreen() {
@@ -20,7 +21,7 @@ function DocumentationScreen() {
     },
     {
       text: "Prepare the app",
-      component: <SetupDoc />,
+      component: <PrepareAppDoc />,
     },
   ]);
 
