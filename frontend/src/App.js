@@ -8,7 +8,6 @@ import "./App.css";
 
 const Header = lazy(() => import("./components/Header"));
 const HomeScreen = lazy(() => import("./screens/HomeScreen"));
-const AboutScreen = lazy(() => import("./screens/AboutScreen"));
 const DocumentationScreen = lazy(() => import("./screens/DocumentationScreen"));
 const LoginScreen = lazy(() => import("./screens/LoginScreen"));
 const CollectionsScreen = lazy(() => import("./screens/CollectionsScreen"));
@@ -38,7 +37,6 @@ function App() {
                   <Route path="/" element={<HomeScreen />} />
                   <Route path="/detect" element={<DetectScreen />} />
                   <Route path="/collections" element={<CollectionsScreen />} />
-                  <Route path="/about" element={<AboutScreen />} />
                   <Route path="/live" element={<LiveScreen />} />
                   <Route path="/account" element={<AccountScreen />} />
                   <Route

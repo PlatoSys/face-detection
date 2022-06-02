@@ -20,7 +20,7 @@ function DocumentationScreen() {
       component: <SetupDoc />,
     },
     {
-      text: "Prepare the app",
+      text: "Prepare/Use the app",
       component: <PrepareAppDoc />,
     },
   ]);

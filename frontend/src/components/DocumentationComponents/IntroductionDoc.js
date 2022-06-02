@@ -13,7 +13,7 @@ function IntroductionDoc() {
         </Card.Text>
         <Card.Text>The tutorial assumes that you have:</Card.Text>
         <ListGroup>
-          <ListGroup.Item>Free 0xDetect Account</ListGroup.Item>
+          <ListGroup.Item>0xDetect Account</ListGroup.Item>
           <ListGroup.Item>Good Internet Connection</ListGroup.Item>
         </ListGroup>
       </Card.Body>
