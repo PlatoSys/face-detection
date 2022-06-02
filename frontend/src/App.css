@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+
+.docMenuUnderlineBlack {
+  border-bottom: 1px solid rgb(26, 26, 26);
+}
+
+.docMenuUnderlineLight {
+  border-bottom: 1px solid rgb(216, 216, 216);
+}
