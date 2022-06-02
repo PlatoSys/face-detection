@@ -4,6 +4,7 @@ from django.urls import path
 from .views import (CollectionsDetailView, MyTokenObtainPairView,
                     faceDetection, registerUser, CollectionsListView)
 
+app_name = 'api'
 
 urlpatterns = [
     path('detect/', faceDetection, name='detect'),

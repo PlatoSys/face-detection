@@ -101,7 +101,7 @@ class Detection:
 
     @staticmethod
     def to_json(face):
-        return  {
+        return {
                 'box': {
                     'x': face['box'][0],
                     'y': face['box'][1],
@@ -129,7 +129,7 @@ class Detection:
                         'x': face['keypoints']['nose'][0],
                         'y': face['keypoints']['nose'][1]
                     },
-                }            
+                }
             }
 
     def save(self):

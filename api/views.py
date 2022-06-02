@@ -100,7 +100,7 @@ def registerUser(request):
         password=make_password(data['password']),
     )
     serializer = UserSerializerWithToken(user)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 @permission_classes([IsAuthenticated])
