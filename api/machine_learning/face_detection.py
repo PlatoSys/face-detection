@@ -29,7 +29,7 @@ class Detection:
     def detect_faces(self):
         """Detect All Faces"""
         self.faces = [face for face in self.faces if face['confidence'] > 0.85]
-        self.predict_age()
+        self.predict_gender()
         self._add_bounding_boxes()
 
     def _add_bounding_boxes(self):
@@ -57,8 +57,8 @@ class Detection:
         cv2.putText(self.frame, text, (x, y - 10),
                     font, scale, color.value, 2, 2)
 
-    def predict_age(self):
-        """Predict Age"""
+    def predict_gender(self):
+        """Predict Gender"""
         MODEL_MEAN_VALUES = (78.4263377603, 87.7689143744, 114.895847746)
         GENDER_MODEL = './api/machine_learning/weights/deploy_gender.prototxt'
         GENDER_PROTO = './api/machine_learning/weights/gender_net.caffemodel'
@@ -94,6 +94,14 @@ class Detection:
             self.rectangle_colors[f'{x}_{y}_{w}_{h}'] = color
             self._put_text(f'{gender}-{round(confidence_score*100, 1)}%',
                            x=x, y=y, scale=scale, color=color)
+
+    @property
+    def width(self):
+        return self.image.shape[1]
+
+    @property
+    def height(self):
+        return self.image.shape[0]
 
     @property
     def landmarks(self):
@@ -140,6 +148,6 @@ class Detection:
 class Color(Enum):
     """Color Enum"""
 
-    RED = (0, 0, 255)
-    GREEN = (0, 255, 0)
-    BLUE = (255, 0, 0)
+    RED = (51, 56, 219)
+    GREEN = (182, 219, 145)
+    BLUE = (244, 149, 50)

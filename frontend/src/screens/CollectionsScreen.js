@@ -53,7 +53,7 @@ function CollectionsScreen() {
   }, [navigate, setAuthToken, setUserData, userData, authToken, typeFilter]);
 
   const csvFormatter = (data) => {
-    const copy = data;
+    const copy = JSON.parse(JSON.stringify(data));
     copy.forEach(element => {
         delete element.landmarks;
         element.user = userData.email;
@@ -150,7 +150,7 @@ function CollectionsScreen() {
                 </Card.Body>
               </Card>
               <Card style={{ width: "50%" }}>
-                <Card.Img variant="top" src={`${x.processedImage}`} />
+                  <Card.Img variant="top" src={`${x.processedImage}`} />
                 <Card.Body
                   className="d-flex justify-content-between"
                   style={{ alignItems: "center" }}

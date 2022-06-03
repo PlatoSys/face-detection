@@ -9,7 +9,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.views import APIView
-from .models import Face
+from .models import DetectionImage
 from .machine_learning.face_detection import Detection
 from .serializers import (UserSerializerWithToken, MyTokenObtainPairSerializer,
                           CollectionSerializer)
@@ -24,15 +24,15 @@ def process_image(image, filename, folder, user, tmp_path, isLive):
     original_image = cld_upload(image, folder=f'{folder}/{user}',
                                 public_id=filename)
 
-    face = Detection(filename, img_path=original_image['url'],
+    detection_image = Detection(filename, img_path=original_image['url'],
                      detect_eyes=True, save_path=tmp_path)
-    face.detect_faces()
-    face.save()
+    detection_image.detect_faces()
+    detection_image.save()
 
     processed_image = cld_upload(tmp_path, folder=f'processed_images/{user}',
                                  public_id=filename)
 
-    Face.objects.create(
+    DetectionImage.objects.create(
         user=user,
         filename=f'{filename}',
         image=original_image['url'],
@@ -40,7 +40,9 @@ def process_image(image, filename, folder, user, tmp_path, isLive):
         originalPublicId=original_image['public_id'],
         processedPublicId=processed_image['public_id'],
         isLive=isLive,
-        landmarks=face.landmarks
+        landmarks=detection_image.landmarks,
+        width=detection_image.width,
+        height=detection_image.height
     )
     os.remove(tmp_path)
 
@@ -48,7 +50,7 @@ def process_image(image, filename, folder, user, tmp_path, isLive):
         'name': f'{filename}',
         'original': original_image['url'],
         'processed': processed_image['url'],
-        'landmarks': face.landmarks
+        'landmarks': detection_image.landmarks
     }
 
 
@@ -109,7 +111,7 @@ class CollectionsListView(APIView):
 
     def get(self, request):
         """Get Images"""
-        collections = Face.objects.filter(user=request.user)
+        collections = DetectionImage.objects.filter(user=request.user)
 
         imgType = request.headers.get('ImageType')
         if imgType != 'All' or not imgType:
@@ -124,7 +126,7 @@ class CollectionsListView(APIView):
         """Delete Images"""
         imgType = request.headers.get('ImageType')
 
-        filtered = Face.objects.filter(user=request.user)
+        filtered = DetectionImage.objects.filter(user=request.user)
         if imgType != 'All':
             isLive = bool(imgType == 'Live')
             filtered = filtered.filter(isLive=int(isLive))
@@ -150,7 +152,7 @@ class CollectionsDetailView(APIView):
 
     def delete(self, request, pk):
         """Delete Image"""
-        filtered = Face.objects.filter(id=pk)
+        filtered = DetectionImage.objects.filter(id=pk)
         first = filtered.first()
 
         cld_destroy(first.originalPublicId)

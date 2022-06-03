@@ -3,7 +3,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import get_user_model
-from api.models import Face
+from api.models import DetectionImage
 User = get_user_model()
 
 
@@ -52,6 +52,6 @@ class CollectionSerializer(serializers.ModelSerializer):
     """Collections Serializer"""
 
     class Meta:
-        model = Face
+        model = DetectionImage
         fields = ['id', 'user', 'filename', 'image', 'processedImage',
-                  'landmarks']
+                  'landmarks', 'width', 'height']
