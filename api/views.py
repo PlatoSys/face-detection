@@ -25,7 +25,7 @@ def process_image(image, filename, folder, user, tmp_path, isLive):
                                 public_id=filename)
 
     detection_image = Detection(filename, img_path=original_image['url'],
-                     detect_eyes=True, save_path=tmp_path)
+                                detect_eyes=True, save_path=tmp_path)
     detection_image.detect_faces()
     detection_image.save()
 
