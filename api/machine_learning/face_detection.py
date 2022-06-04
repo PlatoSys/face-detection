@@ -94,6 +94,7 @@ class Detection:
             self.rectangle_colors[f'{x}_{y}_{w}_{h}'] = color
             self._put_text(f'{gender}-{round(confidence_score*100, 1)}%',
                            x=x, y=y, scale=scale, color=color)
+            face['gender'] = gender
 
     @property
     def width(self):
@@ -137,7 +138,8 @@ class Detection:
                         'x': face['keypoints']['nose'][0],
                         'y': face['keypoints']['nose'][1]
                     },
-                }
+                },
+                'gender': face['gender']
             }
 
     def save(self):
