@@ -106,11 +106,12 @@ class Detection:
 
     @property
     def landmarks(self):
-        return [self.to_json(face) for face in self.faces]
+        return [self.to_json(index, face) for index, face in enumerate(self.faces)]
 
     @staticmethod
-    def to_json(face):
+    def to_json(index, face):
         return {
+                'face_id': index,
                 'box': {
                     'x': face['box'][0],
                     'y': face['box'][1],

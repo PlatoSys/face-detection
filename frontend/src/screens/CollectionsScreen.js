@@ -116,14 +116,23 @@ function CollectionsScreen() {
       
       const xPosition = (landmark.box.x / widthAspectRatio)
       const yPosition = landmark.box.y / heightAspectRatio
-  
+
+      let color = "";
+      if (Object.keys(activeFaces).length !== 0){
+        const activeFace = activeFaces.find(f => f.id === imageId)
+        console.log(activeFace)
+        if (landmark.face_id === activeFace.face_id){
+          color = 'white'
+        }
+      }
+
       return {
         width: `${resizedWidth}px`,
         height: `${resizedHeight}px`,
         top: `${yPosition}px`,
         left: `${xPosition}px`,
         opacity: "0.2",
-        // backgroundColor: 'white',
+        backgroundColor: color,
         border: "1px solid white",
         position: "absolute",
         cursor: "pointer"
