@@ -2,8 +2,8 @@
 from django.contrib.admin import ModelAdmin, register, action
 from import_export.admin import ImportExportActionModelAdmin
 import cloudinary
-from .models import Face, User
-from .resources import FaceResource
+from .models import DetectionImage, User
+from .resources import DetectionImageResource
 
 
 @register(User)
@@ -33,17 +33,18 @@ def delete_from_cloud(modeladmin, request, queryset):
         cloudinary.uploader.destroy(instance.processedPublicId)
         instance.delete()
 
-    if Face.objects.count() == len(queryset):
+    if DetectionImage.objects.count() == len(queryset):
         remove_folders('live_images')
         remove_folders('processed_images')
         remove_folders('original_images')
 
 
-@register(Face)
-class FaceAdmin(ImportExportActionModelAdmin):
-    """Face Admin"""
+@register(DetectionImage)
+class DetectionImageAdmin(ImportExportActionModelAdmin):
+    """DetectionImage Admin"""
 
-    list_display = ('user', 'filename', 'image', 'processedImage', 'isLive')
+    list_display = ('user', 'filename', 'image', 'processedImage', 'isLive',
+                    'width', 'height')
     search_fields = ('email', 'firstname')
     actions = [delete_from_cloud]
-    resource_class = FaceResource
+    resource_class = DetectionImageResource

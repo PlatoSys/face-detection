@@ -56,8 +56,8 @@ class User(AbstractBaseUser):
         return True
 
 
-class Face(models.Model):
-    """Face Model"""
+class DetectionImage(models.Model):
+    """Detection Image Model"""
 
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     filename = models.CharField(max_length=200, blank=True)
@@ -68,6 +68,8 @@ class Face(models.Model):
     isLive = models.BooleanField(default=False)
     createdAt = models.DateTimeField(auto_now_add=True)
     landmarks = models.JSONField(default=dict)
+    width = models.IntegerField()
+    height = models.IntegerField()
 
     def __str__(self) -> str:
         return f'{self.filename}'

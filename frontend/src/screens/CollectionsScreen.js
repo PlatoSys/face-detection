@@ -16,6 +16,8 @@ function CollectionsScreen() {
   const [collection, setCollection] = useState([]);
   const [csvCollection, setCsvCollection] = useState([]);
   const [typeFilter, setTypeFilter] = useState("All");
+  const [activeFaces, setActiveFaces] = useState([]);
+
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -40,6 +42,7 @@ function CollectionsScreen() {
           setCollection(response.data);
           setLoader(false);
           csvFormatter(response.data);
+          loadFaceDetails(response.data);
         })
         .catch((error) => {
           if (error.response.status === 401) {
@@ -52,8 +55,17 @@ function CollectionsScreen() {
     }
   }, [navigate, setAuthToken, setUserData, userData, authToken, typeFilter]);
 
+  const loadFaceDetails = (data) => {
+      const activeFacesCopy = []
+      data.forEach((element) => {
+          activeFacesCopy.push({
+                id:element.id, ...element.landmarks[0]})
+      });
+      setActiveFaces(activeFacesCopy);
+  }
+
   const csvFormatter = (data) => {
-    const copy = data;
+    const copy = JSON.parse(JSON.stringify(data));
     copy.forEach(element => {
         delete element.landmarks;
         element.user = userData.email;
@@ -89,6 +101,68 @@ function CollectionsScreen() {
       });
     }
   };
+
+  const catchAspectRatio = (landmark, imageId, origWidth, origHeight) => {
+    const img = document.getElementById(imageId);
+    if (img){
+      const aspectRatio = origWidth / origHeight
+      const imgWidth = img.width;
+      const imgHeight = img.width / aspectRatio;
+
+      const widthAspectRatio = origWidth / imgWidth;
+      const heightAspectRatio = origHeight / imgHeight;
+      const resizedWidth = landmark.box.width / widthAspectRatio;
+      const resizedHeight = landmark.box.height / heightAspectRatio
+      
+      const xPosition = (landmark.box.x / widthAspectRatio)
+      const yPosition = landmark.box.y / heightAspectRatio
+
+      let color = "";
+      if (Object.keys(activeFaces).length !== 0){
+        const activeFace = activeFaces.find(f => f.id === imageId)
+        if (landmark.face_id === activeFace.face_id){
+          color = 'white'
+        }
+      }
+
+      return {
+        width: `${resizedWidth}px`,
+        height: `${resizedHeight}px`,
+        top: `${yPosition}px`,
+        left: `${xPosition}px`,
+        opacity: "0.2",
+        backgroundColor: color,
+        border: "1px solid white",
+        position: "absolute",
+        cursor: "pointer"
+      }
+    }
+    return {}
+  }
+
+  const changeFace = (face, index) => {
+    const data = {id: face.id, ...face.landmarks[index]}
+    setActiveFaces([
+      data,
+      ...activeFaces.filter(f => f.id !== face.id)
+    ])
+  }
+
+  const getGenderData = (faceId) => {
+    if(Object.keys(activeFaces).length !== 0){
+      const gender = activeFaces.find(face => face.id === faceId).gender;
+      return `${gender.identity} - ${String(gender.confidence).slice(0, 5)}%`
+    }
+    return ""
+  }
+
+  const getAgeData = (faceId) => {
+    if(Object.keys(activeFaces).length !== 0){
+      const age = activeFaces.find(face => face.id === faceId).age;
+      return `${age.identity} - ${String(age.confidence).slice(0, 5)}%`
+    }
+    return ""
+  }
 
   return (
     <div>
@@ -137,20 +211,14 @@ function CollectionsScreen() {
           </div>
           {collection.map((x) => (
             <Row key={x.filename} style={{ marginBottom: "15px" }}>
-              <Card style={{ width: "50%" }}>
-                <Card.Img variant="top" src={`${x.image}`} />
-                <Card.Body
-                  className="d-flex justify-content-between"
-                  style={{ alignItems: "center" }}
-                >
-                  <Card.Title>Original Image</Card.Title>
-                  {/* <Button onClick={() => downloadImage(x.filename, x.image)}>
-                Download
-              </Button> */}
-                </Card.Body>
-              </Card>
-              <Card style={{ width: "50%" }}>
-                <Card.Img variant="top" src={`${x.processedImage}`} />
+
+              <Card style={{ width: "60%", padding: 0 }}>
+              <Card.Img variant="top" id={x.id} src={`${x.processedImage}`} />
+                  {
+                    x.landmarks.map((landmark, index) => (
+                      <div onClick={() => changeFace(x, index)} key={landmark.box.x} style={catchAspectRatio(landmark, x.id, x.width, x.height)} role="button" />
+                    ))
+                  }
                 <Card.Body
                   className="d-flex justify-content-between"
                   style={{ alignItems: "center" }}
@@ -170,6 +238,17 @@ function CollectionsScreen() {
                   >
                     Download
                   </Button>
+                </Card.Body>
+              </Card>
+              <Card style={{ width: "40%" }}>
+                <Card.Title className="fs-1 my-2" >Face Details</Card.Title>
+                <Card.Body>
+                  <Card.Text className="fs-4">
+                    Gender: {getGenderData(x.id)}
+                  </Card.Text>
+                  <Card.Text className="fs-4">
+                    Age: {getAgeData(x.id)}
+                  </Card.Text>
                 </Card.Body>
               </Card>
             </Row>

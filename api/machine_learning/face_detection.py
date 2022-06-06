@@ -30,6 +30,7 @@ class Detection:
         """Detect All Faces"""
         self.faces = [face for face in self.faces if face['confidence'] > 0.85]
         self.predict_age()
+        self.predict_gender()
         self._add_bounding_boxes()
 
     def _add_bounding_boxes(self):
@@ -60,17 +61,52 @@ class Detection:
     def predict_age(self):
         """Predict Age"""
         MODEL_MEAN_VALUES = (78.4263377603, 87.7689143744, 114.895847746)
+        AGE_MODEL = './api/machine_learning/weights/age_deploy.prototxt'
+        AGE_PROTO = './api/machine_learning/weights/age_net.caffemodel'
+        AGE_LIST = ['(0 - 2)', '(4 - 6)', '(8 - 12)', '(15 - 20)', '(25 - 32)',
+                    '(38 - 43)', '(48 - 53)', '(60 - 100)']
+
+        age_net = cv2.dnn.readNet(AGE_MODEL, AGE_PROTO)
+
+        for index, face in enumerate(self.faces):
+            x, y, w, h = face['box']
+            x_offset = int(w * 0.5)
+            y_offset = int(h * 0.5)
+
+            x0 = 0 if x - x_offset <= 0 else x - x_offset
+            y0 = 0 if y - y_offset <= 0 else y - y_offset
+
+            cropped_face = self.frame[y0: y + h + y_offset,
+                                      x0: x + w + x_offset]
+            image = cropped_face.copy()
+
+            blob = cv2.dnn.blobFromImage(image=image, scalefactor=1.0, size=(
+                227, 227), mean=MODEL_MEAN_VALUES, swapRB=False, crop=False)
+
+            age_net.setInput(blob)
+            age_preds = age_net.forward()
+            index = age_preds[0].argmax()
+            age = AGE_LIST[index]
+            confidence_score = age_preds[0][index]
+
+            face['age'] = {
+                "identity": age,
+                "confidence": confidence_score * 100
+            }
+
+    def predict_gender(self):
+        """Predict Gender"""
+        MODEL_MEAN_VALUES = (78.4263377603, 87.7689143744, 114.895847746)
         GENDER_MODEL = './api/machine_learning/weights/deploy_gender.prototxt'
         GENDER_PROTO = './api/machine_learning/weights/gender_net.caffemodel'
         GENDER_LIST = ['Male', 'Female']
 
         gender_net = cv2.dnn.readNetFromCaffe(GENDER_MODEL, GENDER_PROTO)
 
-        width = self.frame.shape[0]
         for face in self.faces:
             x, y, w, h = face['box']
-            x_offset = int(w * 0.5)
-            y_offset = int(h * 0.5)
+            x_offset = int(w * 0.8)
+            y_offset = int(h * 0.8)
 
             x0 = 0 if x - x_offset <= 0 else x - x_offset
             y0 = 0 if y - y_offset <= 0 else y - y_offset
@@ -88,20 +124,32 @@ class Detection:
             gender = GENDER_LIST[index]
             confidence_score = gender_preds[0][index]
 
-            scale = (w / width if float(w / width) > 0.3 else 0.3) + 0.2
             color = Color.BLUE if gender == 'Male' else Color.RED
             color = color if confidence_score > 0.8 else Color.GREEN
             self.rectangle_colors[f'{x}_{y}_{w}_{h}'] = color
-            self._put_text(f'{gender}-{round(confidence_score*100, 1)}%',
-                           x=x, y=y, scale=scale, color=color)
+
+            face['gender'] = {
+                "identity": gender,
+                "confidence": confidence_score * 100
+            }
+
+    @property
+    def width(self):
+        return self.image.shape[1]
+
+    @property
+    def height(self):
+        return self.image.shape[0]
 
     @property
     def landmarks(self):
-        return [self.to_json(face) for face in self.faces]
+        return [
+            self.to_json(index, face) for index, face in enumerate(self.faces)]
 
     @staticmethod
-    def to_json(face):
+    def to_json(index, face):
         return {
+                'face_id': index,
                 'box': {
                     'x': face['box'][0],
                     'y': face['box'][1],
@@ -129,7 +177,9 @@ class Detection:
                         'x': face['keypoints']['nose'][0],
                         'y': face['keypoints']['nose'][1]
                     },
-                }
+                },
+                'gender': face['gender'],
+                'age': face['age']
             }
 
     def save(self):
@@ -140,6 +190,6 @@ class Detection:
 class Color(Enum):
     """Color Enum"""
 
-    RED = (0, 0, 255)
-    GREEN = (0, 255, 0)
-    BLUE = (255, 0, 0)
+    RED = (51, 56, 219)
+    GREEN = (182, 219, 145)
+    BLUE = (244, 149, 50)
