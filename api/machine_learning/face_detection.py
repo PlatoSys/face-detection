@@ -60,7 +60,6 @@ class Detection:
 
     def predict_age(self):
         """Predict Age"""
-
         MODEL_MEAN_VALUES = (78.4263377603, 87.7689143744, 114.895847746)
         AGE_MODEL = './api/machine_learning/weights/age_deploy.prototxt'
         AGE_PROTO = './api/machine_learning/weights/age_net.caffemodel'
