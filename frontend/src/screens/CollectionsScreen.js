@@ -39,7 +39,6 @@ function CollectionsScreen() {
       axios
         .get("/api/collections/", config)
         .then((response) => {
-          console.log(response.data)
           setCollection(response.data);
           setLoader(false);
           csvFormatter(response.data);
@@ -148,6 +147,19 @@ function CollectionsScreen() {
     ])
   }
 
+  const getGenderData = (faceId) => {
+    if(Object.keys(activeFaces).length !== 0){
+      const gender = activeFaces.find(face => face.id === faceId).gender;
+      return `${gender.identity} - ${String(gender.confidence).slice(0, 5)}%`
+    }
+  }
+
+  const getAgeData = (faceId) => {
+    if(Object.keys(activeFaces).length !== 0){
+      const age = activeFaces.find(face => face.id === faceId).age;
+      return `${age.identity} - ${String(age.confidence).slice(0, 5)}%`
+    }
+  }
 
   return (
     <div>
@@ -229,10 +241,10 @@ function CollectionsScreen() {
                 <Card.Title className="fs-1 my-2" >Face Details</Card.Title>
                 <Card.Body>
                   <Card.Text className="fs-4">
-                    Gender: {Object.keys(activeFaces).length !== 0 && activeFaces.find(face => face.id === x.id).gender}
+                    Gender: {getGenderData(x.id)}
                   </Card.Text>
                   <Card.Text className="fs-4">
-                    Age Range: {Object.keys(activeFaces).length !== 0 && activeFaces.find(face => face.id === x.id).age}
+                    Age: {getAgeData(x.id)}
                   </Card.Text>
                   <Card.Text>
                   </Card.Text>

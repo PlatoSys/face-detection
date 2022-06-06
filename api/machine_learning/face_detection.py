@@ -86,9 +86,15 @@ class Detection:
                 227, 227), mean=MODEL_MEAN_VALUES, swapRB=False, crop=False)
 
             age_net.setInput(blob)
-            agePreds = age_net.forward()
-            age = AGE_LIST[agePreds[0].argmax()]
-            face['age'] = age
+            age_preds = age_net.forward()
+            index = age_preds[0].argmax()
+            age = AGE_LIST[index]
+            confidence_score = age_preds[0][index]
+
+            face['age'] = {
+                "identity": age,
+                "confidence": confidence_score * 100
+            }
 
     def predict_gender(self):
         """Predict Gender"""
@@ -125,9 +131,11 @@ class Detection:
             color = Color.BLUE if gender == 'Male' else Color.RED
             color = color if confidence_score > 0.8 else Color.GREEN
             self.rectangle_colors[f'{x}_{y}_{w}_{h}'] = color
-            self._put_text(f'{gender}-{round(confidence_score*100, 1)}%',
-                           x=x, y=y, scale=scale, color=color)
-            face['gender'] = gender
+
+            face['gender'] = {
+                "identity": gender,
+                "confidence": confidence_score * 100
+            }
 
     @property
     def width(self):
