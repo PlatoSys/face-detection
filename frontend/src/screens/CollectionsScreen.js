@@ -56,7 +56,7 @@ function CollectionsScreen() {
   }, [navigate, setAuthToken, setUserData, userData, authToken, typeFilter]);
 
   const loadFaceDetails = (data) => {
-      let activeFacesCopy = []
+      const activeFacesCopy = []
       data.forEach((element) => {
           activeFacesCopy.push({
                 id:element.id, ...element.landmarks[0]})
@@ -103,7 +103,7 @@ function CollectionsScreen() {
   };
 
   const catchAspectRatio = (landmark, imageId, origWidth, origHeight) => {
-    let img = document.getElementById(imageId);
+    const img = document.getElementById(imageId);
     if (img){
       const aspectRatio = origWidth / origHeight
       const imgWidth = img.width;
@@ -137,6 +137,7 @@ function CollectionsScreen() {
         cursor: "pointer"
       }
     }
+    return {}
   }
 
   const changeFace = (face, index) => {
@@ -152,6 +153,7 @@ function CollectionsScreen() {
       const gender = activeFaces.find(face => face.id === faceId).gender;
       return `${gender.identity} - ${String(gender.confidence).slice(0, 5)}%`
     }
+    return ""
   }
 
   const getAgeData = (faceId) => {
@@ -159,6 +161,7 @@ function CollectionsScreen() {
       const age = activeFaces.find(face => face.id === faceId).age;
       return `${age.identity} - ${String(age.confidence).slice(0, 5)}%`
     }
+    return ""
   }
 
   return (
@@ -206,14 +209,14 @@ function CollectionsScreen() {
               <Filter typeFilter={typeFilter} setTypeFilter={setTypeFilter} />
             </div>
           </div>
-          {collection.map((x, index) => (
+          {collection.map((x) => (
             <Row key={x.filename} style={{ marginBottom: "15px" }}>
 
               <Card style={{ width: "60%", padding: 0 }}>
               <Card.Img variant="top" id={x.id} src={`${x.processedImage}`} />
                   {
                     x.landmarks.map((landmark, index) => (
-                      <div onClick={() => changeFace(x, index)} key={landmark.box.x} style={catchAspectRatio(landmark, x.id, x.width, x.height)}></div>
+                      <div onClick={() => changeFace(x, index)} key={landmark.box.x} style={catchAspectRatio(landmark, x.id, x.width, x.height)} role="active-face" />
                     ))
                   }
                 <Card.Body
@@ -245,8 +248,6 @@ function CollectionsScreen() {
                   </Card.Text>
                   <Card.Text className="fs-4">
                     Age: {getAgeData(x.id)}
-                  </Card.Text>
-                  <Card.Text>
                   </Card.Text>
                 </Card.Body>
               </Card>
