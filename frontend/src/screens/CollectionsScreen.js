@@ -216,7 +216,7 @@ function CollectionsScreen() {
               <Card.Img variant="top" id={x.id} src={`${x.processedImage}`} />
                   {
                     x.landmarks.map((landmark, index) => (
-                      <div onClick={() => changeFace(x, index)} key={landmark.box.x} style={catchAspectRatio(landmark, x.id, x.width, x.height)} role="active-face" />
+                      <div onClick={() => changeFace(x, index)} key={landmark.box.x} style={catchAspectRatio(landmark, x.id, x.width, x.height)} role="button" />
                     ))
                   }
                 <Card.Body
