@@ -39,6 +39,7 @@ function CollectionsScreen() {
       axios
         .get("/api/collections/", config)
         .then((response) => {
+          console.log(response.data)
           setCollection(response.data);
           setLoader(false);
           csvFormatter(response.data);
@@ -120,7 +121,6 @@ function CollectionsScreen() {
       let color = "";
       if (Object.keys(activeFaces).length !== 0){
         const activeFace = activeFaces.find(f => f.id === imageId)
-        console.log(activeFace)
         if (landmark.face_id === activeFace.face_id){
           color = 'white'
         }
@@ -226,14 +226,16 @@ function CollectionsScreen() {
                 </Card.Body>
               </Card>
               <Card style={{ width: "40%" }}>
-                <Card.Title className="fs-1" >Information</Card.Title>
-                <Card.Body
-                  className="d-flex justify-content-between"
-                  style={{ alignItems: "center" }}
-                >
-                  <Card.Title>
-                    {Object.keys(activeFaces).length !== 0 && activeFaces.find(face => face.id === x.id).gender}
-                  </Card.Title>
+                <Card.Title className="fs-1 my-2" >Face Details</Card.Title>
+                <Card.Body>
+                  <Card.Text className="fs-4">
+                    Gender: {Object.keys(activeFaces).length !== 0 && activeFaces.find(face => face.id === x.id).gender}
+                  </Card.Text>
+                  <Card.Text className="fs-4">
+                    Age Range: {Object.keys(activeFaces).length !== 0 && activeFaces.find(face => face.id === x.id).age}
+                  </Card.Text>
+                  <Card.Text>
+                  </Card.Text>
                 </Card.Body>
               </Card>
             </Row>

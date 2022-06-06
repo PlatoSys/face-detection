@@ -29,6 +29,7 @@ class Detection:
     def detect_faces(self):
         """Detect All Faces"""
         self.faces = [face for face in self.faces if face['confidence'] > 0.85]
+        self.predict_age()
         self.predict_gender()
         self._add_bounding_boxes()
 
@@ -57,6 +58,38 @@ class Detection:
         cv2.putText(self.frame, text, (x, y - 10),
                     font, scale, color.value, 2, 2)
 
+    def predict_age(self):
+        """Predict Age"""
+
+        MODEL_MEAN_VALUES = (78.4263377603, 87.7689143744, 114.895847746)
+        AGE_MODEL = './api/machine_learning/weights/age_deploy.prototxt'
+        AGE_PROTO = './api/machine_learning/weights/age_net.caffemodel'
+        AGE_LIST = ['(0 - 2)', '(4 - 6)', '(8 - 12)', '(15 - 20)', '(25 - 32)',
+                   '(38 - 43)', '(48 - 53)', '(60 - 100)']
+
+        age_net = cv2.dnn.readNet(AGE_MODEL, AGE_PROTO)
+
+        width = self.frame.shape[0]
+        for index, face in enumerate(self.faces):
+            x, y, w, h = face['box']
+            x_offset = int(w * 0.5)
+            y_offset = int(h * 0.5)
+
+            x0 = 0 if x - x_offset <= 0 else x - x_offset
+            y0 = 0 if y - y_offset <= 0 else y - y_offset
+
+            cropped_face = self.frame[y0: y + h + y_offset,
+                                      x0: x + w + x_offset]
+            image = cropped_face.copy()
+
+            blob = cv2.dnn.blobFromImage(image=image, scalefactor=1.0, size=(
+                227, 227), mean=MODEL_MEAN_VALUES, swapRB=False, crop=False)
+
+            age_net.setInput(blob)
+            agePreds = age_net.forward()
+            age = AGE_LIST[agePreds[0].argmax()]
+            face['age'] = age
+
     def predict_gender(self):
         """Predict Gender"""
         MODEL_MEAN_VALUES = (78.4263377603, 87.7689143744, 114.895847746)
@@ -69,8 +102,8 @@ class Detection:
         width = self.frame.shape[0]
         for face in self.faces:
             x, y, w, h = face['box']
-            x_offset = int(w * 0.5)
-            y_offset = int(h * 0.5)
+            x_offset = int(w * 0.8)
+            y_offset = int(h * 0.8)
 
             x0 = 0 if x - x_offset <= 0 else x - x_offset
             y0 = 0 if y - y_offset <= 0 else y - y_offset
@@ -141,7 +174,8 @@ class Detection:
                         'y': face['keypoints']['nose'][1]
                     },
                 },
-                'gender': face['gender']
+                'gender': face['gender'],
+                'age': face['age']
             }
 
     def save(self):
