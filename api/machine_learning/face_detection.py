@@ -65,11 +65,10 @@ class Detection:
         AGE_MODEL = './api/machine_learning/weights/age_deploy.prototxt'
         AGE_PROTO = './api/machine_learning/weights/age_net.caffemodel'
         AGE_LIST = ['(0 - 2)', '(4 - 6)', '(8 - 12)', '(15 - 20)', '(25 - 32)',
-                   '(38 - 43)', '(48 - 53)', '(60 - 100)']
+                    '(38 - 43)', '(48 - 53)', '(60 - 100)']
 
         age_net = cv2.dnn.readNet(AGE_MODEL, AGE_PROTO)
 
-        width = self.frame.shape[0]
         for index, face in enumerate(self.faces):
             x, y, w, h = face['box']
             x_offset = int(w * 0.5)
@@ -127,7 +126,6 @@ class Detection:
             gender = GENDER_LIST[index]
             confidence_score = gender_preds[0][index]
 
-            scale = (w / width if float(w / width) > 0.3 else 0.3) + 0.2
             color = Color.BLUE if gender == 'Male' else Color.RED
             color = color if confidence_score > 0.8 else Color.GREEN
             self.rectangle_colors[f'{x}_{y}_{w}_{h}'] = color
