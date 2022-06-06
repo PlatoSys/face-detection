@@ -104,7 +104,6 @@ class Detection:
 
         gender_net = cv2.dnn.readNetFromCaffe(GENDER_MODEL, GENDER_PROTO)
 
-        width = self.frame.shape[0]
         for face in self.faces:
             x, y, w, h = face['box']
             x_offset = int(w * 0.8)
