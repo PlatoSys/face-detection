@@ -21,6 +21,7 @@ User = get_user_model()
 
 def process_image(image, filename, folder, user, tmp_path, isLive):
     """Process Image"""
+    filename = filename.split('.')[0]
     original_image = cld_upload(image, folder=f'{folder}/{user}',
                                 public_id=filename)
 

@@ -250,6 +250,15 @@ function CollectionsScreen() {
                     Age: {getAgeData(x.id)}
                   </Card.Text>
                 </Card.Body>
+                <Card.Title className="fs-1" >Image Details</Card.Title>
+                <Card.Body>
+                  <Card.Text className="fs-4">
+                    Detected Faces: {x.landmarks.length}
+                  </Card.Text>
+                  <Card.Text className="fs-4">
+                    Image Dimension: {x.width}x{x.height}
+                  </Card.Text>
+                </Card.Body>
               </Card>
             </Row>
           ))}
