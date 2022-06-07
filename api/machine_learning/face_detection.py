@@ -2,11 +2,15 @@
 from enum import Enum
 import cv2
 from skimage import io
-from keras.models import load_model
+from keras.models import load_model, model_from_json
 from mtcnn_cv2 import MTCNN
+import numpy as np
 
-
-model = load_model('./api/machine_learning/final_cnn_model_checkpoint.h5')
+json_file = open('./api/machine_learning/weights/emotion_model.json', 'r')
+loaded_model_json = json_file.read()
+json_file.close()
+emotion_model = model_from_json(loaded_model_json)
+emotion_model.load_weights("./api/machine_learning/weights/emotion_model.h5")
 
 
 class Detection:
@@ -29,6 +33,7 @@ class Detection:
     def detect_faces(self):
         """Detect All Faces"""
         self.faces = [face for face in self.faces if face['confidence'] > 0.85]
+        self.predict_emotion()
         self.predict_age()
         self.predict_gender()
         self._add_bounding_boxes()
@@ -58,6 +63,42 @@ class Detection:
         cv2.putText(self.frame, text, (x, y - 10),
                     font, scale, color.value, 2, 2)
 
+    def predict_emotion(self):
+        """Predict Emotion"""
+        EMOTION_LIST = {
+            0: "Angry",
+            1: "Disgusted",
+            2: "Fearful",
+            3: "Happy",
+            4: "Neutral",
+            5: "Sad",
+            6: "Surprised"
+        }
+
+        for face in self.faces:
+            x, y, w, h = face['box']
+            x_offset = int(w * 0.5)
+            y_offset = int(h * 0.5)
+
+            x0 = 0 if x - x_offset <= 0 else x - x_offset
+            y0 = 0 if y - y_offset <= 0 else y - y_offset
+
+            cropped_face = self.frame[y0: y + h + y_offset,
+                                      x0: x + w + x_offset]
+            image = cropped_face.copy()
+            	
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            image = np.expand_dims(np.expand_dims(cv2.resize(image, (48, 48)), -1), 0)
+            prediction = emotion_model.predict(image)
+            
+            index = int(np.argmax(prediction))
+            emotion = EMOTION_LIST[index]
+            
+            face['emotion'] = {
+                "identity": emotion,
+                "confidence": 92.5
+            }
+
     def predict_age(self):
         """Predict Age"""
         MODEL_MEAN_VALUES = (78.4263377603, 87.7689143744, 114.895847746)
@@ -68,7 +109,7 @@ class Detection:
 
         age_net = cv2.dnn.readNet(AGE_MODEL, AGE_PROTO)
 
-        for index, face in enumerate(self.faces):
+        for face in self.faces:
             x, y, w, h = face['box']
             x_offset = int(w * 0.5)
             y_offset = int(h * 0.5)
@@ -179,7 +220,8 @@ class Detection:
                     },
                 },
                 'gender': face['gender'],
-                'age': face['age']
+                'age': face['age'],
+                'emotion': face['emotion'],
             }
 
     def save(self):

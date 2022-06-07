@@ -40,6 +40,7 @@ function CollectionsScreen() {
         .get("/api/collections/", config)
         .then((response) => {
           setCollection(response.data);
+          console.log(response.data)
           setLoader(false);
           csvFormatter(response.data);
           loadFaceDetails(response.data);
@@ -163,6 +164,14 @@ function CollectionsScreen() {
     }
     return ""
   }
+  
+  const getEmotionData = (faceId) => {
+    if(Object.keys(activeFaces).length !== 0){
+      const emotion = activeFaces.find(face => face.id === faceId).emotion;
+      return `${emotion.identity} - ${String(emotion.confidence).slice(0, 5)}%`
+    }
+    return ""
+  }
 
   return (
     <div>
@@ -248,6 +257,9 @@ function CollectionsScreen() {
                   </Card.Text>
                   <Card.Text className="fs-4">
                     Age: {getAgeData(x.id)}
+                  </Card.Text>
+                  <Card.Text className="fs-4">
+                    Emotion: Appears to be {getEmotionData(x.id)}
                   </Card.Text>
                 </Card.Body>
                 <Card.Title className="fs-1" >Image Details</Card.Title>
