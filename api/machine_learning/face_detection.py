@@ -77,9 +77,8 @@ class Detection:
 
         for face in self.faces:
             x, y, w, h = face['box']
-            x_offset = int(w * 0.5)
-            y_offset = int(h * 0.5)
-
+            x_offset = 0
+            y_offset = 0
             x0 = 0 if x - x_offset <= 0 else x - x_offset
             y0 = 0 if y - y_offset <= 0 else y - y_offset
 

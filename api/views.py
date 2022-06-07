@@ -113,6 +113,7 @@ class CollectionsListView(APIView):
     def get(self, request):
         """Get Images"""
         collections = DetectionImage.objects.filter(user=request.user)
+        collections = collections.order_by('-createdAt')
 
         imgType = request.headers.get('ImageType')
         if imgType != 'All' or not imgType:

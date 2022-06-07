@@ -270,6 +270,9 @@ function CollectionsScreen() {
                   <Card.Text className="fs-4">
                     Image Dimension: {x.width}x{x.height}
                   </Card.Text>
+                  <Card.Text className="fs-4">
+                    Processed Date/Time: {x.createdAt.slice(0, 10)} / {x.createdAt.slice(11, 19)}
+                  </Card.Text>
                 </Card.Body>
               </Card>
             </Row>

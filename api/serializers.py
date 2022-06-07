@@ -54,4 +54,4 @@ class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = DetectionImage
         fields = ['id', 'user', 'filename', 'image', 'processedImage',
-                  'landmarks', 'width', 'height']
+                  'landmarks', 'width', 'height', 'createdAt']
