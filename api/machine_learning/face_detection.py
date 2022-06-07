@@ -2,7 +2,7 @@
 from enum import Enum
 import cv2
 from skimage import io
-from keras.models import load_model, model_from_json
+from keras.models import model_from_json
 from mtcnn_cv2 import MTCNN
 import numpy as np
 
@@ -85,14 +85,15 @@ class Detection:
             cropped_face = self.frame[y0: y + h + y_offset,
                                       x0: x + w + x_offset]
             image = cropped_face.copy()
-            	
+
             image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            image = np.expand_dims(np.expand_dims(cv2.resize(image, (48, 48)), -1), 0)
+            image = np.expand_dims(
+                np.expand_dims(cv2.resize(image, (48, 48)), -1), 0)
             prediction = emotion_model.predict(image)
-            
+
             index = int(np.argmax(prediction))
             emotion = EMOTION_LIST[index]
-            
+
             face['emotion'] = {
                 "identity": emotion,
                 "confidence": 92.5
