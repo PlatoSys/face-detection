@@ -40,7 +40,6 @@ function CollectionsScreen() {
         .get("/api/collections/", config)
         .then((response) => {
           setCollection(response.data);
-          console.log(response.data)
           setLoader(false);
           csvFormatter(response.data);
           loadFaceDetails(response.data);
@@ -65,10 +64,18 @@ function CollectionsScreen() {
       setActiveFaces(activeFacesCopy);
   }
 
+  function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+  }
+
+  function replaceAll(str, find, replace) {
+    return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+  }
+
   const csvFormatter = (data) => {
     const copy = JSON.parse(JSON.stringify(data));
     copy.forEach(element => {
-        delete element.landmarks;
+        element.landmarks = replaceAll(JSON.stringify(element.landmarks), `"`, `'`)
         element.user = userData.email;
     });
     setCsvCollection(copy);
@@ -197,7 +204,7 @@ function CollectionsScreen() {
                 style={{ marginBottom: "15px", marginLeft: "10px" }}
               >
                 <CSVLink
-                  style={{ textDecoration: "none", color: "inherit" }}
+                  style={{ textDecoration: "none", color: "inherit", padding: "15px" }}
                   filename={`${new Date()}.csv`}
                   data={csvCollection}
                 >
