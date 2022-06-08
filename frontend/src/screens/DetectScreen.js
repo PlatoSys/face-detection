@@ -131,7 +131,8 @@ function DetectScreen() {
               type="hidden"
               placeholder="Enter Image"
               value={image}
-              onChange={(e) => setImage(e.target.value)} />
+              onChange={(e) => setImage(e.target.value)}
+            />
             <Form.Group controlId="image" className="mb-3">
               <Form.Control
                 type="file"

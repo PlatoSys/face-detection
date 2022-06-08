@@ -23,13 +23,15 @@ function AccountScreen() {
           <Card.Title>Email: {userData.email}</Card.Title>
           <Card.Title>Firstname: {userData.firstname}</Card.Title>
           <Card.Title>{displayToken}</Card.Title>
-          {
-            !displayToken ? (<Button onClick={() => setDisplayToken(authToken)}>Reveal Token</Button>) : (<Button onClick={() => setDisplayToken("")}>Hide Token</Button>)
-
-          }
+          {!displayToken ? (
+            <Button onClick={() => setDisplayToken(authToken)}>
+              Reveal Token
+            </Button>
+          ) : (
+            <Button onClick={() => setDisplayToken("")}>Hide Token</Button>
+          )}
         </Card.Body>
       </Card>
-
     </div>
   );
 }

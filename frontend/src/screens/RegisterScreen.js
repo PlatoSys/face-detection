@@ -64,7 +64,8 @@ function RegisterScreen() {
               type="firstname"
               placeholder="Enter Firstname"
               value={firstname}
-              onChange={(e) => setFirstname(e.target.value)} />
+              onChange={(e) => setFirstname(e.target.value)}
+            />
           </Form.Group>
 
           <Form.Group controlId="email" className="my-2">
@@ -75,7 +76,8 @@ function RegisterScreen() {
               autoComplete={"off"}
               placeholder="Enter Email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)} />
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </Form.Group>
           <Form.Group controlId="password" className="my-2">
             <Form.Label>Password</Form.Label>
@@ -85,7 +87,8 @@ function RegisterScreen() {
               autoComplete={"off"}
               placeholder="Enter password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)} />
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </Form.Group>
           <Form.Group controlId="passwordConfirm" className="my-2">
             <Form.Label>Confirm Password</Form.Label>
@@ -95,7 +98,8 @@ function RegisterScreen() {
               placeholder="Confirm password"
               value={confirmPassword}
               autoComplete="off"
-              onChange={(e) => setConfirmPassword(e.target.value)} />
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
           </Form.Group>
           <Button type="submit" variant="primary" className="my-2">
             Sign up

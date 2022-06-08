@@ -56,30 +56,36 @@ function CollectionsScreen() {
   }, [navigate, setAuthToken, setUserData, userData, authToken, typeFilter]);
 
   const loadFaceDetails = (data) => {
-      const activeFacesCopy = []
-      data.forEach((element) => {
-          activeFacesCopy.push({
-                id:element.id, ...element.landmarks[0]})
+    const activeFacesCopy = [];
+    data.forEach((element) => {
+      activeFacesCopy.push({
+        id: element.id,
+        ...element.landmarks[0],
       });
-      setActiveFaces(activeFacesCopy);
-  }
+    });
+    setActiveFaces(activeFacesCopy);
+  };
 
   function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
   }
 
   function replaceAll(str, find, replace) {
-    return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+    return str.replace(new RegExp(escapeRegExp(find), "g"), replace);
   }
 
   const csvFormatter = (data) => {
     const copy = JSON.parse(JSON.stringify(data));
-    copy.forEach(element => {
-        element.landmarks = replaceAll(JSON.stringify(element.landmarks), `"`, `'`)
-        element.user = userData.email;
+    copy.forEach((element) => {
+      element.landmarks = replaceAll(
+        JSON.stringify(element.landmarks),
+        `"`,
+        `'`
+      );
+      element.user = userData.email;
     });
     setCsvCollection(copy);
-}
+  };
 
   const downloadImage = (name, url) => {
     saveAs(url, name);
@@ -112,24 +118,24 @@ function CollectionsScreen() {
 
   const catchAspectRatio = (landmark, imageId, origWidth, origHeight) => {
     const img = document.getElementById(imageId);
-    if (img){
-      const aspectRatio = origWidth / origHeight
+    if (img) {
+      const aspectRatio = origWidth / origHeight;
       const imgWidth = img.width;
       const imgHeight = img.width / aspectRatio;
 
       const widthAspectRatio = origWidth / imgWidth;
       const heightAspectRatio = origHeight / imgHeight;
       const resizedWidth = landmark.box.width / widthAspectRatio;
-      const resizedHeight = landmark.box.height / heightAspectRatio
-      
-      const xPosition = (landmark.box.x / widthAspectRatio)
-      const yPosition = landmark.box.y / heightAspectRatio
+      const resizedHeight = landmark.box.height / heightAspectRatio;
+
+      const xPosition = landmark.box.x / widthAspectRatio;
+      const yPosition = landmark.box.y / heightAspectRatio;
 
       let color = "";
-      if (Object.keys(activeFaces).length !== 0){
-        const activeFace = activeFaces.find(f => f.id === imageId)
-        if (landmark.face_id === activeFace.face_id){
-          color = 'white'
+      if (Object.keys(activeFaces).length !== 0) {
+        const activeFace = activeFaces.find((f) => f.id === imageId);
+        if (landmark.face_id === activeFace.face_id) {
+          color = "white";
         }
       }
 
@@ -142,43 +148,40 @@ function CollectionsScreen() {
         backgroundColor: color,
         border: "1px solid white",
         position: "absolute",
-        cursor: "pointer"
-      }
+        cursor: "pointer",
+      };
     }
-    return {}
-  }
+    return {};
+  };
 
   const changeFace = (face, index) => {
-    const data = {id: face.id, ...face.landmarks[index]}
-    setActiveFaces([
-      data,
-      ...activeFaces.filter(f => f.id !== face.id)
-    ])
-  }
+    const data = { id: face.id, ...face.landmarks[index] };
+    setActiveFaces([data, ...activeFaces.filter((f) => f.id !== face.id)]);
+  };
 
   const getGenderData = (faceId) => {
-    if(Object.keys(activeFaces).length !== 0){
-      const gender = activeFaces.find(face => face.id === faceId).gender;
-      return `${gender.identity} - ${String(gender.confidence).slice(0, 5)}%`
+    if (Object.keys(activeFaces).length !== 0) {
+      const gender = activeFaces.find((face) => face.id === faceId).gender;
+      return `${gender.identity} - ${String(gender.confidence).slice(0, 5)}%`;
     }
-    return ""
-  }
+    return "";
+  };
 
   const getAgeData = (faceId) => {
-    if(Object.keys(activeFaces).length !== 0){
-      const age = activeFaces.find(face => face.id === faceId).age;
-      return `${age.identity} - ${String(age.confidence).slice(0, 5)}%`
+    if (Object.keys(activeFaces).length !== 0) {
+      const age = activeFaces.find((face) => face.id === faceId).age;
+      return `${age.identity} - ${String(age.confidence).slice(0, 5)}%`;
     }
-    return ""
-  }
-  
+    return "";
+  };
+
   const getEmotionData = (faceId) => {
-    if(Object.keys(activeFaces).length !== 0){
-      const emotion = activeFaces.find(face => face.id === faceId).emotion;
-      return `${emotion.identity} - ${String(emotion.confidence).slice(0, 5)}%`
+    if (Object.keys(activeFaces).length !== 0) {
+      const emotion = activeFaces.find((face) => face.id === faceId).emotion;
+      return `${emotion.identity} - ${String(emotion.confidence).slice(0, 5)}%`;
     }
-    return ""
-  }
+    return "";
+  };
 
   return (
     <div>
@@ -204,7 +207,11 @@ function CollectionsScreen() {
                 style={{ marginBottom: "15px", marginLeft: "10px" }}
               >
                 <CSVLink
-                  style={{ textDecoration: "none", color: "inherit", padding: "15px" }}
+                  style={{
+                    textDecoration: "none",
+                    color: "inherit",
+                    padding: "15px",
+                  }}
                   filename={`${new Date()}.csv`}
                   data={csvCollection}
                 >
@@ -227,14 +234,16 @@ function CollectionsScreen() {
           </div>
           {collection.map((x) => (
             <Row key={x.filename} style={{ marginBottom: "15px" }}>
-
               <Card style={{ width: "60%", padding: 0 }}>
-              <Card.Img variant="top" id={x.id} src={`${x.processedImage}`} />
-                  {
-                    x.landmarks.map((landmark, index) => (
-                      <div onClick={() => changeFace(x, index)} key={landmark.box.x} style={catchAspectRatio(landmark, x.id, x.width, x.height)} role="button" />
-                    ))
-                  }
+                <Card.Img variant="top" id={x.id} src={`${x.processedImage}`} />
+                {x.landmarks.map((landmark, index) => (
+                  <div
+                    onClick={() => changeFace(x, index)}
+                    key={landmark.box.x}
+                    style={catchAspectRatio(landmark, x.id, x.width, x.height)}
+                    role="button"
+                  />
+                ))}
                 <Card.Body
                   className="d-flex justify-content-between"
                   style={{ alignItems: "center" }}
@@ -257,7 +266,7 @@ function CollectionsScreen() {
                 </Card.Body>
               </Card>
               <Card style={{ width: "40%" }}>
-                <Card.Title className="fs-1 my-2" >Face Details</Card.Title>
+                <Card.Title className="fs-1 my-2">Face Details</Card.Title>
                 <Card.Body>
                   <Card.Text className="fs-4">
                     Gender: {getGenderData(x.id)}
@@ -269,7 +278,7 @@ function CollectionsScreen() {
                     Emotion: Appears to be {getEmotionData(x.id)}
                   </Card.Text>
                 </Card.Body>
-                <Card.Title className="fs-1" >Image Details</Card.Title>
+                <Card.Title className="fs-1">Image Details</Card.Title>
                 <Card.Body>
                   <Card.Text className="fs-4">
                     Detected Faces: {x.landmarks.length}
@@ -278,7 +287,8 @@ function CollectionsScreen() {
                     Image Dimension: {x.width}x{x.height}
                   </Card.Text>
                   <Card.Text className="fs-4">
-                    Processed Date/Time: {x.createdAt.slice(0, 10)} / {x.createdAt.slice(11, 19)}
+                    Processed Date/Time: {x.createdAt.slice(0, 10)} /{" "}
+                    {x.createdAt.slice(11, 19)}
                   </Card.Text>
                 </Card.Body>
               </Card>
