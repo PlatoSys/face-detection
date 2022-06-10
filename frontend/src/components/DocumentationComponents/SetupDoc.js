@@ -17,9 +17,9 @@ function SetupDoc() {
           for making API Requests
         </Card.Text>
         <Card.Text>Click Reveal Token</Card.Text>
-        <Card.Img src="./images/docsetup2.avif"></Card.Img>
+        <Card.Img src="./images/docsetup2.avif" />
         <Card.Text>Copy It</Card.Text>
-        <Card.Img src="./images/docsetup1.avif"></Card.Img>
+        <Card.Img src="./images/docsetup1.avif" />
       </Card.Body>
     </Card>
   );
