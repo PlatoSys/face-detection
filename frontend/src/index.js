@@ -4,7 +4,6 @@ import "./index.css";
 import "./bootstrap.min.css";
 import App from "./App";
 
-import 'purecss/build/pure.css'
 
 ReactDOM.render(
   <React.StrictMode>
